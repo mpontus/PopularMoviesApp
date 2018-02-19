@@ -37,12 +37,10 @@ public class MainActivity extends AppCompatActivity {
         service.getPopularMovies(BuildConfig.TMDB_API_KEY)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<MovieListResponse>() {
-                    @Override
-                    public void accept(MovieListResponse movieListResponse) throws Exception {
-                        for (Movie movie : movieListResponse.results) {
-                            Log.v("Movie", movie.title);
-                        }
+                .map(response -> response.results)
+                .subscribe(movies -> {
+                    for (Movie movie : movies) {
+                        Log.v("Movie", movie.title);
                     }
                 });
     }

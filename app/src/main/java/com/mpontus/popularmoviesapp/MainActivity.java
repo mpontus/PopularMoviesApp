@@ -1,18 +1,15 @@
 package com.mpontus.popularmoviesapp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -37,26 +34,16 @@ public class MainActivity extends AppCompatActivity {
 
         TMDbService service = retrofit.create(TMDbService.class);
 
-        Call<MovieListResponse> call = service.getPopularMovies(BuildConfig.TMDB_API_KEY);
-
-        call.enqueue(new Callback<MovieListResponse>() {
-            @Override
-            public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
-                MovieListResponse result = response.body();
-
-                if (result == null) {
-                    return;
-                }
-
-                for (Movie movie : result.results) {
-                    Log.v("Movie", movie.title);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MovieListResponse> call, Throwable t) {
-                Log.v("error", "error");
-            }
-        });
+        service.getPopularMovies(BuildConfig.TMDB_API_KEY)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<MovieListResponse>() {
+                    @Override
+                    public void accept(MovieListResponse movieListResponse) throws Exception {
+                        for (Movie movie : movieListResponse.results) {
+                            Log.v("Movie", movie.title);
+                        }
+                    }
+                });
     }
 }

@@ -1,0 +1,3 @@
+# Replace <YOUR_API_KEY> with your TMDb API key and save this file as "secrets.properties"
+# You can find your API Key on this page: https://www.themoviedb.org/settings/api
+TMDB_API_KEY="<YOUR_API_KEY>"

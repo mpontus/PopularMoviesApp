@@ -1,5 +1,7 @@
 package com.mpontus.popularmoviesapp;
 
+import android.net.Uri;
+
 import java.util.List;
 
 
@@ -73,4 +75,17 @@ public class Movie {
      * Average value of all votes cast for the movie by TMDB users
      */
     float voteAverage;
+
+    /**
+     * Return the absolute url of the movie poster
+     *
+     * @return URL Poster url
+     */
+    Uri getPosterUrl() {
+        // TODO: Find a way to avoid hardcodding this string
+        return Uri.parse("https://image.tmdb.org/t/p/w185/")
+                .buildUpon()
+                .appendEncodedPath(posterPath)
+                .build();
+    }
 }

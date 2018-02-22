@@ -27,6 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     MovieListAdapter mMovieListAdapter;
+    GridLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +35,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mMovieListAdapter = new MovieListAdapter();
+        mLayoutManager = new GridLayoutManager(this, 2);
 
         RecyclerView movieList = findViewById(R.id.rvMovies);
         movieList.setAdapter(mMovieListAdapter);
-        movieList.setLayoutManager(new GridLayoutManager(this, 2));
+        movieList.setLayoutManager(mLayoutManager);
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
@@ -77,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
             Context context = parent.getContext();
             View v = LayoutInflater.from(context)
                     .inflate(R.layout.movie_card, parent, false);
+
+            ViewGroup.LayoutParams p = v.getLayoutParams();
+
+            p.width = parent.getWidth() / mLayoutManager.getSpanCount();
+            p.height = (int) (4.8 / 3 * p.width);
+
+            v.setLayoutParams(p);
 
             return new MovieViewHolder(context, v);
         }

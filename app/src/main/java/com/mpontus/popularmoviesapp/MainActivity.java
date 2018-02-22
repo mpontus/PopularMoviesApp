@@ -80,13 +80,6 @@ public class MainActivity extends AppCompatActivity {
             View v = LayoutInflater.from(context)
                     .inflate(R.layout.movie_card, parent, false);
 
-            ViewGroup.LayoutParams p = v.getLayoutParams();
-
-            p.width = parent.getWidth() / mLayoutManager.getSpanCount();
-            p.height = (int) (4.8 / 3 * p.width);
-
-            v.setLayoutParams(p);
-
             return new MovieViewHolder(context, v);
         }
 

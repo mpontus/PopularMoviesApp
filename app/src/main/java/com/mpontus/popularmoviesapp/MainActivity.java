@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         movieList.setAdapter(mMovieListAdapter);
         movieList.setLayoutManager(layoutManager);
 
-        tmdbService.getPopularMovies(BuildConfig.TMDB_API_KEY)
+        tmdbService.getPopularMovies()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(response -> response.results)

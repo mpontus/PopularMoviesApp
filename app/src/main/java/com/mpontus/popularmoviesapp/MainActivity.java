@@ -1,10 +1,10 @@
 package com.mpontus.popularmoviesapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import javax.inject.Inject;
@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
     @Override
     public void onClick(View v, Movie m) {
-        Log.v("Movie Clicked", m.title);
+        Intent intent = new Intent(this, DetailActivity.class);
+
+        intent.putExtra(DetailActivity.EXTRA_MOVIE, m);
+
+        startActivity(intent);
     }
 }

@@ -14,14 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
-    private List<Movie> mMovies;
+    private List<Movie> mMovies = new ArrayList<>();
+    private OnClickListener mOnClickListener;
 
-    MovieListAdapter() {
-        this(new ArrayList<>());
-    }
-
-    MovieListAdapter(List<Movie> movies) {
-        mMovies = movies;
+    MovieListAdapter(OnClickListener onClickListener) {
+        mOnClickListener = onClickListener;
     }
 
     @Override
@@ -30,7 +27,7 @@ class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHo
         View v = LayoutInflater.from(context)
                 .inflate(R.layout.movie_card, parent, false);
 
-        return new MovieViewHolder(context, v);
+        return new MovieViewHolder(context, v, mOnClickListener);
     }
 
     @Override
@@ -51,23 +48,39 @@ class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHo
         notifyDataSetChanged();
     }
 
-    final class MovieViewHolder extends RecyclerView.ViewHolder {
+    interface OnClickListener {
+        void onClick(View v, Movie m);
+    }
+
+    final class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Context mContext;
         private ImageView mPoster;
+        private OnClickListener mOnClickListener;
+        private Movie mMovie;
 
-        MovieViewHolder(Context context, View itemView) {
+        MovieViewHolder(Context context, View itemView, OnClickListener onClickListener) {
             super(itemView);
 
             mContext = context;
             mPoster = itemView.findViewById(R.id.ivPoster);
+            mOnClickListener = onClickListener;
+
+            itemView.setOnClickListener(this);
         }
 
         void setMovie(Movie movie) {
+            mMovie = movie;
+
             mPoster.setContentDescription(movie.title);
 
             Picasso.with(mContext)
                     .load(movie.getPosterUrl())
                     .into(mPoster);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mOnClickListener.onClick(v, mMovie);
         }
     }
 }

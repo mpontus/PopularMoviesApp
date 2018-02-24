@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -15,7 +17,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieListAdapter.OnClickListener {
 
     MovieListAdapter mMovieListAdapter;
     GridLayoutManager mLayoutManager;
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mMovieListAdapter = new MovieListAdapter();
+        mMovieListAdapter = new MovieListAdapter(this);
         mLayoutManager = new GridLayoutManager(this, 2);
 
         RecyclerView movieList = findViewById(R.id.rvMovies);
@@ -52,5 +54,10 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(movies -> {
                     mMovieListAdapter.setMovies(movies);
                 });
+    }
+
+    @Override
+    public void onClick(View v, Movie m) {
+        Log.v("Movie Clicked", m.title);
     }
 }

@@ -9,7 +9,9 @@ public class PopularMoviesApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        appComponent = DaggerAppComponent.create();
+        appComponent = DaggerAppComponent.builder()
+                .tMDbServiceModule(new TMDbServiceModule(getString(R.string.tmdb_base_url)))
+                .build();
     }
 
     public AppComponent getAppComponent() {

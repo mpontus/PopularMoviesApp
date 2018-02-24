@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Popular Movies App</string>
     <string name="movie_title">Movie title</string>
+    <string name="tmdb_base_url" translatable="false">https://api.themoviedb.org/3/</string>
 </resources>

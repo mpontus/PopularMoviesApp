@@ -5,12 +5,12 @@ import android.net.Uri;
 import java.util.List;
 
 
-public class Movie {
+class Movie {
 
     /**
      * Relative image url of the movie's poster
      */
-    String posterPath;
+    private String posterPath;
 
     /**
      * Indicates whether the movie is adult-rated or not
@@ -23,7 +23,7 @@ public class Movie {
     String overview;
 
     /**
-     * List of ids referending movie genres
+     * List of ids referencing movie genres
      *
      * See: https://developers.themoviedb.org/3/genres/get-movie-list
      */
@@ -82,7 +82,7 @@ public class Movie {
      * @return URL Poster url
      */
     Uri getPosterUrl() {
-        // TODO: Find a way to avoid hardcodding this string
+        // TODO: Find a way to avoid hardcoding this string
         return Uri.parse("https://image.tmdb.org/t/p/w185/")
                 .buildUpon()
                 .appendEncodedPath(posterPath)

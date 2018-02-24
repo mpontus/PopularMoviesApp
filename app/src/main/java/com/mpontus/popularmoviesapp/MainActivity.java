@@ -14,8 +14,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements MovieListAdapter.OnClickListener {
 
-    MovieListAdapter mMovieListAdapter;
-    GridLayoutManager mLayoutManager;
+    private MovieListAdapter mMovieListAdapter;
 
     @Inject
     TMDbService tmdbService;
@@ -28,19 +27,17 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         ((PopularMoviesApplication) getApplication()).getAppComponent().inject(this);
 
         mMovieListAdapter = new MovieListAdapter(this);
-        mLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
 
         RecyclerView movieList = findViewById(R.id.rvMovies);
         movieList.setAdapter(mMovieListAdapter);
-        movieList.setLayoutManager(mLayoutManager);
+        movieList.setLayoutManager(layoutManager);
 
         tmdbService.getPopularMovies(BuildConfig.TMDB_API_KEY)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(response -> response.results)
-                .subscribe(movies -> {
-                    mMovieListAdapter.setMovies(movies);
-                });
+                .subscribe(movies -> mMovieListAdapter.setMovies(movies));
     }
 
     @Override

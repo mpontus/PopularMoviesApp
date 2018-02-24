@@ -2,7 +2,7 @@ package com.mpontus.popularmoviesapp;
 
 import java.util.List;
 
-public class MovieListResponse {
+class MovieListResponse {
 
     /**
      * The page index of the response in the paginated listing

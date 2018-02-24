@@ -2,7 +2,6 @@ package com.mpontus.popularmoviesapp;
 
 import android.app.Application;
 
-
 public class PopularMoviesApplication extends Application {
     private AppComponent appComponent;
 
@@ -10,9 +9,7 @@ public class PopularMoviesApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        appComponent = DaggerAppComponent.builder()
-                .tMDbServiceModule(new TMDbServiceModule())
-                .build();
+        appComponent = DaggerAppComponent.create();
     }
 
     public AppComponent getAppComponent() {

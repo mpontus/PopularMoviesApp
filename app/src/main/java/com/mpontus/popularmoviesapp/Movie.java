@@ -55,7 +55,7 @@ class Movie implements Parcelable {
     /**
      * Relative URL to the backdrop picture of the movie
      */
-    String backdropPath;
+    private String backdropPath;
 
     /**
      * Popularity score of the movie
@@ -78,20 +78,6 @@ class Movie implements Parcelable {
      * Average value of all votes cast for the movie by TMDB users
      */
     float voteAverage;
-
-    /**
-     * Return the absolute url of the movie poster
-     *
-     * @return URL Poster url
-     */
-    Uri getPosterUrl() {
-        // TODO: Find a way to avoid hardcoding this string
-        return Uri.parse("https://image.tmdb.org/t/p/w185/")
-                .buildUpon()
-                .appendEncodedPath(posterPath)
-                .build();
-    }
-
 
     @Override
     public int describeContents() {
@@ -146,4 +132,30 @@ class Movie implements Parcelable {
             return new Movie[size];
         }
     };
+
+    /**
+     * Return the absolute url of the movie poster
+     *
+     * @return URL Poster url
+     */
+    Uri getPosterUrl() {
+        // TODO: Find a way to avoid hardcoding this string
+        return Uri.parse("https://image.tmdb.org/t/p/w185/")
+                .buildUpon()
+                .appendEncodedPath(posterPath)
+                .build();
+    }
+
+    /**
+     * Return the absolute url of the movie poster
+     *
+     * @return URL Poster url
+     */
+    Uri getBackdropUrl() {
+        // TODO: Find a way to avoid hardcoding this string
+        return Uri.parse("https://image.tmdb.org/t/p/w185/")
+                .buildUpon()
+                .appendEncodedPath(backdropPath)
+                .build();
+    }
 }

@@ -1,7 +1,7 @@
 <h1 align="center">Popular Movies App</h1>
 
 <p align="center">
-  <img src="https://github.com/mpontus/PopularMoviesApp/raw/master/media/banner.jpg" alt="Banner image" height="440" />
+  <img src="https://github.com/mpontus/PopularMoviesApp/raw/master/media/banner.png" alt="Banner image" height="440" />
 </p>
 
 <p align="center">This app connects you with <a href="https://www.themoviedb.org/">The Movie Database</a> to help you find new movies.</center>

@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso;
 import java.util.Calendar;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -25,12 +26,13 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
 
         Movie movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
 
         String formattedTitle = getString(R.string.movie_title_format,
                 movie.title,
-                movie.releaseDate.getYear());
+                movie.getReleaseYear());
 
         String formattedRating = getString(R.string.movie_rating_format,
                 movie.voteAverage,

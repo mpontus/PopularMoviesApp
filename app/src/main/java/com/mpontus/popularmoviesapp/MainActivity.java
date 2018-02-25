@@ -9,29 +9,45 @@ import android.view.View;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements MovieListAdapter.OnClickListener {
 
-    private MovieListAdapter mMovieListAdapter;
+    /**
+     * Number of columns in the grid
+     */
+    public static final int SPAN_COUNT = 2;
 
-    @Inject
-    TMDbService tmdbService;
+    /**
+     * TMDb API client
+     */
+    @Inject TMDbService tmdbService;
+
+    /**
+     * Recycler view for movie listing
+     */
+    @BindView(R.id.rvMovies) RecyclerView mMovieListView;
+
+    /**
+     * Recycler view adapter
+     */
+    private MovieListAdapter mMovieListAdapter = new MovieListAdapter(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
         ((PopularMoviesApplication) getApplication()).getAppComponent().inject(this);
 
-        mMovieListAdapter = new MovieListAdapter(this);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager movieListLayoutManager =
+                new GridLayoutManager(this, SPAN_COUNT);
 
-        RecyclerView movieList = findViewById(R.id.rvMovies);
-        movieList.setAdapter(mMovieListAdapter);
-        movieList.setLayoutManager(layoutManager);
+        mMovieListView.setAdapter(mMovieListAdapter);
+        mMovieListView.setLayoutManager(movieListLayoutManager);
 
         tmdbService.getPopularMovies()
                 .subscribeOn(Schedulers.newThread())

@@ -13,6 +13,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
     private List<Movie> mMovies = new ArrayList<>();
     final private OnClickListener mOnClickListener;
@@ -52,35 +56,35 @@ class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHo
         void onClick(View v, Movie m);
     }
 
-    final class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    final class MovieViewHolder extends RecyclerView.ViewHolder {
         final private Context mContext;
-        final private ImageView mPoster;
         final private OnClickListener mOnClickListener;
+
         private Movie mMovie;
+
+        @BindView(R.id.ivPoster) ImageView mPosterView;
 
         MovieViewHolder(Context context, View itemView, OnClickListener onClickListener) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
             mContext = context;
-            mPoster = itemView.findViewById(R.id.ivPoster);
             mOnClickListener = onClickListener;
+        }
 
-            itemView.setOnClickListener(this);
+        @OnClick
+        void onClick(View v) {
+            mOnClickListener.onClick(v, mMovie);
         }
 
         void setMovie(Movie movie) {
             mMovie = movie;
 
-            mPoster.setContentDescription(movie.title);
+            mPosterView.setContentDescription(movie.title);
 
             Picasso.with(mContext)
                     .load(movie.getPosterUrl())
-                    .into(mPoster);
-        }
-
-        @Override
-        public void onClick(View v) {
-            mOnClickListener.onClick(v, mMovie);
+                    .into(mPosterView);
         }
     }
 }

@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -24,6 +26,11 @@ class Movie implements Parcelable {
      * Short synopsis of the movie
      */
     String overview;
+
+    /**
+     * Release date
+     */
+    private Date releaseDate;
 
     /**
      * List of ids referencing movie genres
@@ -132,6 +139,19 @@ class Movie implements Parcelable {
             return new Movie[size];
         }
     };
+
+    /**
+     * Returns release year
+     *
+     * @return
+     */
+    int getReleaseYear() {
+        Calendar c = Calendar.getInstance();
+
+        c.setTime(releaseDate);
+
+        return c.get(Calendar.YEAR);
+    }
 
     /**
      * Return the absolute url of the movie poster

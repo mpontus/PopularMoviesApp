@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
         mMovieListView.setAdapter(mMovieListAdapter);
         mMovieListView.setLayoutManager(movieListLayoutManager);
+        mMovieListView.setNestedScrollingEnabled(false);
 
         tmdbService.getPopularMovies()
                 .subscribeOn(Schedulers.newThread())

@@ -16,11 +16,12 @@ import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemSelected;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
      */
     private MovieListAdapter mMovieListAdapter = new MovieListAdapter(this);
 
+    @Inject
+    @Named("sort_order")
     Preference<Integer> mSortOrderPreference;
 
     @Override
@@ -88,9 +91,6 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
         // Test preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        mSortOrderPreference = RxSharedPreferences.create(preferences)
-                .getInteger(getString(R.string.pref_sort_order_key));
 
         mSortOrderPreference
                 .asObservable()

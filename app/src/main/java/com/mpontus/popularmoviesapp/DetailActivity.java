@@ -1,5 +1,6 @@
 package com.mpontus.popularmoviesapp;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
@@ -26,6 +27,13 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        ActionBar actionBar = getActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         ButterKnife.bind(this);
 
         Movie movie = getIntent().getParcelableExtra(EXTRA_MOVIE);

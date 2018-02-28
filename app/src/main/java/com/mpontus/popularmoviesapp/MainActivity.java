@@ -2,7 +2,10 @@ package com.mpontus.popularmoviesapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
      * Number of columns in the grid
      */
     public static final int SPAN_COUNT = 2;
+    public static final String SAVED_STATE_MOVIE_LIST_LAYOUT_MANAGER = "MOVIE_LIST_LAYOUT_MANAGER";
 
     /**
      * TMDb API client
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     @Inject
     @Named("sort_order")
     Preference<Integer> mSortOrderPreference;
+    private RecyclerView.LayoutManager mMovieListLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +83,11 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
         mSortOrderView.setAdapter(sortOrderAdapter);
 
-
         // Initialize recycler view
-        RecyclerView.LayoutManager movieListLayoutManager =
-                new GridLayoutManager(this, SPAN_COUNT);
+        mMovieListLayoutManager = new GridLayoutManager(this, SPAN_COUNT);
 
         mMovieListView.setAdapter(mMovieListAdapter);
-        mMovieListView.setLayoutManager(movieListLayoutManager);
+        mMovieListView.setLayoutManager(mMovieListLayoutManager);
         mMovieListView.setNestedScrollingEnabled(false);
 
         mSortOrderPreference
@@ -100,7 +103,27 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     mMovieListAdapter.setMovies(response.results);
+
+                    if (savedInstanceState == null) {
+                        return;
+                    }
+
+                    Parcelable movieListLayoutManagerState =
+                            savedInstanceState.getParcelable(SAVED_STATE_MOVIE_LIST_LAYOUT_MANAGER);
+
+                    if (movieListLayoutManagerState != null) {
+                        mMovieListLayoutManager.onRestoreInstanceState(movieListLayoutManagerState);
+                    }
                 });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Parcelable movieListLayoutManagerState = mMovieListLayoutManager.onSaveInstanceState();
+
+        outState.putParcelable(SAVED_STATE_MOVIE_LIST_LAYOUT_MANAGER, movieListLayoutManagerState);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override

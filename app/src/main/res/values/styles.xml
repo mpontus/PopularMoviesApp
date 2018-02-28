@@ -16,6 +16,7 @@
     </style>
 
     <style name="AppTheme.InvisibleActionBar">
+        <item name="actionBarStyle">@style/Base.ThemeOverlay.AppCompat.ActionBar</item>
     </style>
 
     <style name="MovieTitle">

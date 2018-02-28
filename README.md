@@ -26,6 +26,22 @@ This app was build as part of [Udacity Android Nanodegree Program](https://www.u
 
 Building the source code depends upon a knowledge of [Android Studio](https://developer.android.com/studio/index.html) and having the correct version of SDK installed.
 
+Create TMDb account and acquire API key (v3) from this page:
+
+https://www.themoviedb.org/settings/api
+
+Save the API key in the global gradle.properies file (`$HOME/.gradle/gradle.properties`):
+
+```
+TMDB_API_KEY=<YOUR_API_KEY>
+```
+
+Alternatively, you can store the API key in an environment variable:
+
+```bash
+$ export ORG_GRADLE_PROJECT_TMDB_API_KEY=<YOUR_API_KEY>
+```
+
 Run the following from the root of the source directory:
 
 ```bash

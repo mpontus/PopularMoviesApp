@@ -10,8 +10,8 @@
     <string name="movie_rating_format">Rating: %1$.2f (%2$d votes)</string>
     <string name="pref_sort_order_key">sort_order</string>
 
-    <string-array name="movie_source_options">
+    <string-array name="movie_sort_order_options">
         <item>Popular Movies</item>
-        <item>Recent Movies</item>
+        <item>Top Rated Movies</item>
     </string-array>
 </resources>

@@ -1,7 +1,6 @@
 package com.mpontus.popularmoviesapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,11 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.f2prateek.rx.preferences2.Preference;
-import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,13 +25,13 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity implements MovieListAdapter.OnClickListener {
 
     public static final int SORT_ORDER_POPULAR = 1;
-    public static final int SORT_ORDER_RECENT = 2;
+    public static final int SORT_TOP_RATED = 2;
 
     // TODO: Make correlation between those values and array of options in stirngs.xml more explicit
     // E.g. Custom adapter as an inner class
     public static final int[] SORT_ORDER_VALUES = {
             SORT_ORDER_POPULAR,
-            SORT_ORDER_RECENT,
+            SORT_TOP_RATED,
     };
 
     /**
@@ -75,8 +72,9 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
         // Initialize movie sort order selector
         ArrayAdapter<CharSequence> sortOrderAdapter =
-                ArrayAdapter.createFromResource(this, R.array.movie_source_options,
+                ArrayAdapter.createFromResource(this, R.array.movie_sort_order_options,
                         android.R.layout.simple_spinner_dropdown_item);
+
 
         mSortOrderView.setAdapter(sortOrderAdapter);
 
@@ -89,19 +87,20 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         mMovieListView.setLayoutManager(movieListLayoutManager);
         mMovieListView.setNestedScrollingEnabled(false);
 
-        // Test preferences
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         mSortOrderPreference
                 .asObservable()
-                .subscribe(value -> Log.v("VALUE", String.valueOf(value)));
-
-        // Initialize service
-        tmdbService.getPopularMovies()
-                .subscribeOn(Schedulers.newThread())
+                .observeOn(Schedulers.newThread())
+                .switchMap(sortOrder -> {
+                    if (sortOrder == SORT_ORDER_POPULAR) {
+                        return tmdbService.getPopularMovies();
+                    } else {
+                        return tmdbService.getTopRatedMovies();
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(response -> response.results)
-                .subscribe(movies -> mMovieListAdapter.setMovies(movies));
+                .subscribe(response -> {
+                    mMovieListAdapter.setMovies(response.results);
+                });
     }
 
     @Override
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
         switch (value) {
             case SORT_ORDER_POPULAR:
-            case SORT_ORDER_RECENT:
+            case SORT_TOP_RATED:
                 PreferenceManager.getDefaultSharedPreferences(this)
                         .edit()
                         .putInt(getString(R.string.pref_sort_order_key), value)

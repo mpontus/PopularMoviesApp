@@ -21,6 +21,9 @@ import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -97,8 +100,11 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Store saved instance state for use during initialization
         mSavedInstanceState = savedInstanceState;
 
+        // Most of the initialization is delegated to separate method to allow the user to invoke
+        // reinitialization when the network is unavailable
         tryNetwork();
     }
 
@@ -131,11 +137,11 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         mMovieListView.setLayoutManager(mMovieListLayoutManager);
         mMovieListView.setNestedScrollingEnabled(false);
 
-
+        // Observable of preference changes, including the initial preference value
         Observable<Integer> sortOrderPreferenceObservable = mSortOrderPreference
                 .asObservable();
 
-
+        // Observable of movie responses which follow preference changes
         Observable<MovieListResponse> movieListResponseObservable = sortOrderPreferenceObservable
                 .observeOn(Schedulers.newThread())
                 .switchMap(sortOrder -> {
@@ -152,15 +158,28 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                 })
                 .onErrorResumeNext(Observable.empty());
 
+        // Observable of booleans which singlify the loading state of the application
         Observable<Boolean> isFetchingObservable = Observable.merge(
                 sortOrderPreferenceObservable.map(value -> true),
                 movieListResponseObservable.map(value -> false)
         );
 
+        // Reset movie list before loading new results
+        sortOrderPreferenceObservable
+                .subscribe(value -> {
+                    mMovieListAdapter.setMovies(new ArrayList<>());
+                });
+
+        // Update movie list after the response
         movieListResponseObservable
                 .subscribe(response -> {
                     mMovieListAdapter.setMovies(response.results);
+                });
 
+        // Restore the position of RecyclerView after the first response
+        movieListResponseObservable
+                .firstElement()
+                .subscribe(value -> {
                     if (mSavedInstanceState == null) {
                         return;
                     }
@@ -171,8 +190,12 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                     if (movieListLayoutManagerState != null) {
                         mMovieListLayoutManager.onRestoreInstanceState(movieListLayoutManagerState);
                     }
+
+                    // Probably useless because this subscription can only be initialized once.
+                    mSavedInstanceState = null;
                 });
 
+        // Show loading indicator instead of the UI while the response is loading
         isFetchingObservable
                 .subscribe(isFetching -> {
                     if (isFetching) {

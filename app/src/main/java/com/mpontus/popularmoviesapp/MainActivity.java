@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -71,6 +72,13 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     RecyclerView mMovieListView;
 
     /**
+     * Loading indicator
+     */
+    @Nullable
+    @BindView(R.id.tvLoadingIndicator)
+    TextView mLoadingIndicator;
+
+    /**
      * Saved recycler view position
      */
     private Bundle mSavedInstanceState;
@@ -123,8 +131,12 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         mMovieListView.setLayoutManager(mMovieListLayoutManager);
         mMovieListView.setNestedScrollingEnabled(false);
 
-        mSortOrderPreference
-                .asObservable()
+
+        Observable<Integer> sortOrderPreferenceObservable = mSortOrderPreference
+                .asObservable();
+
+
+        Observable<MovieListResponse> movieListResponseObservable = sortOrderPreferenceObservable
                 .observeOn(Schedulers.newThread())
                 .switchMap(sortOrder -> {
                     if (sortOrder == SORT_ORDER_POPULAR) {
@@ -138,7 +150,14 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                     Toast.makeText(this, R.string.fetching_error_message, Toast.LENGTH_SHORT)
                             .show();
                 })
-                .onErrorResumeNext(Observable.empty())
+                .onErrorResumeNext(Observable.empty());
+
+        Observable<Boolean> isFetchingObservable = Observable.merge(
+                sortOrderPreferenceObservable.map(value -> true),
+                movieListResponseObservable.map(value -> false)
+        );
+
+        movieListResponseObservable
                 .subscribe(response -> {
                     mMovieListAdapter.setMovies(response.results);
 
@@ -151,6 +170,19 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
                     if (movieListLayoutManagerState != null) {
                         mMovieListLayoutManager.onRestoreInstanceState(movieListLayoutManagerState);
+                    }
+                });
+
+        isFetchingObservable
+                .subscribe(isFetching -> {
+                    if (isFetching) {
+                        mMovieListView.setVisibility(View.INVISIBLE);
+                        mSortOrderView.setVisibility(View.INVISIBLE);
+                        mLoadingIndicator.setVisibility(View.VISIBLE);
+                    } else {
+                        mMovieListView.setVisibility(View.VISIBLE);
+                        mSortOrderView.setVisibility(View.VISIBLE);
+                        mLoadingIndicator.setVisibility(View.INVISIBLE);
                     }
                 });
     }

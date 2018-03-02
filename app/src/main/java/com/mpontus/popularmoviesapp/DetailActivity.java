@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -44,7 +42,7 @@ public class DetailActivity extends AppCompatActivity {
 
         String formattedRating = getString(R.string.movie_rating_format,
                 movie.voteAverage,
-                movie.voteCount);
+                getResources().getQuantityString(R.plurals.numberOfVotes, movie.voteCount));
 
         mTitleView.setText(formattedTitle);
         mRatingView.setText(formattedRating);

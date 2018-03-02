@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
      * Loading indicator
      */
     @Nullable
-    @BindView(R.id.tvLoadingIndicator)
-    TextView mLoadingIndicator;
+    @BindView(R.id.progressBar)
+    ProgressBar mLoadingIndicator;
 
     /**
      * Saved recycler view position

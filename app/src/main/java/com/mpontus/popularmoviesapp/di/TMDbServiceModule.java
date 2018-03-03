@@ -18,8 +18,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class TMDbServiceModule {
-    private String mBaseUrl;
-    private String mApiKey;
+    private final String mBaseUrl;
+    private final String mApiKey;
 
     public TMDbServiceModule(String baseUrl, String apiKey) {
         mBaseUrl = baseUrl;

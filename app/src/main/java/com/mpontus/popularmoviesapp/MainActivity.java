@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     /**
      * Recycler view adapter
      */
-    private MovieListAdapter mMovieListAdapter = new MovieListAdapter(this);
+    private final MovieListAdapter mMovieListAdapter = new MovieListAdapter(this);
 
     /**
      * Current sort order selection
@@ -294,10 +294,8 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         movieListResponseObservable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(error -> {
-                    Toast.makeText(this, R.string.fetching_error_message, Toast.LENGTH_SHORT)
-                            .show();
-                })
+                .doOnError(error -> Toast.makeText(this, R.string.fetching_error_message, Toast.LENGTH_SHORT)
+                        .show())
                 .onErrorResumeNext(Observable.empty())
                 .subscribe(
                         response -> {
@@ -317,13 +315,11 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
                                 mSavedInstanceState = null;
                             }
                         },
-                        error -> {
-                            Toast.makeText(
-                                    this,
-                                    R.string.fetching_error_message,
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                        },
+                        error -> Toast.makeText(
+                                this,
+                                R.string.fetching_error_message,
+                                Toast.LENGTH_SHORT
+                        ).show(),
                         () -> {
                             ButterKnife.apply(mViewsFetching, setVisibility(View.GONE));
                             ButterKnife.apply(mViewsLoaded, setVisibility(View.VISIBLE));

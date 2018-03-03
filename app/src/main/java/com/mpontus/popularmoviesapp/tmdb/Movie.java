@@ -130,8 +130,6 @@ public class Movie implements Parcelable {
 
     /**
      * Returns release year
-     *
-     * @return
      */
     public int getReleaseYear() {
         Calendar c = Calendar.getInstance();

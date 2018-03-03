@@ -10,11 +10,14 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Optional;
+import io.reactivex.annotations.Nullable;
 
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_MOVIE = "EXTRA_MOVIE";
 
+    @Nullable
     @BindView(R.id.ivBackdrop) ImageView mBackdropView;
     @BindView(R.id.ivPoster) ImageView mPosterView;
     @BindView(R.id.tvTitle) TextView mTitleView;
@@ -52,8 +55,10 @@ public class DetailActivity extends AppCompatActivity {
                 .load(movie.getPosterUrl(Movie.PosterSize.W780))
                 .into(mPosterView);
 
-        Picasso.with(this)
-                .load(movie.getBackdropUrl(Movie.BackdropSize.W780))
-                .into(mBackdropView);
+        if (mBackdropView != null) {
+            Picasso.with(this)
+                    .load(movie.getBackdropUrl(Movie.BackdropSize.W780))
+                    .into(mBackdropView);
+        }
     }
 }

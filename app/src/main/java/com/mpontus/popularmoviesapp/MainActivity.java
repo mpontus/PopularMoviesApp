@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -14,7 +15,10 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     /**
      * Number of columns in the grid
      */
-    public static final int SPAN_COUNT = 2;
+    public static final int MAX_CARD_WIDTH = 144;
     public static final String SAVED_STATE_MOVIE_LIST_LAYOUT_MANAGER = "MOVIE_LIST_LAYOUT_MANAGER";
 
     /**
@@ -183,12 +187,22 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         mSortOrderView.setSelection(sortOrderAdapter.getPosition(mSortOrder));
 
         // Initialize recycler view
-        mMovieListLayoutManager = new GridLayoutManager(this, SPAN_COUNT);
+        mMovieListLayoutManager = getMovieListLayoutManager();
 
         mMovieListView.setAdapter(mMovieListAdapter);
         mMovieListView.setLayoutManager(mMovieListLayoutManager);
 
         fetchMovies();
+    }
+
+    RecyclerView.LayoutManager getMovieListLayoutManager() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        Float spanCount = (displayMetrics.widthPixels / displayMetrics.density / MAX_CARD_WIDTH);
+
+        return new GridLayoutManager(this, spanCount.intValue());
     }
 
     /**

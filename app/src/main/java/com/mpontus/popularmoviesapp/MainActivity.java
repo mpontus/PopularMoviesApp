@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -15,20 +14,20 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mpontus.popularmoviesapp.tmdb.Movie;
+import com.mpontus.popularmoviesapp.tmdb.MovieListResponse;
+import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     /**
      * TMDb API client
      */
-    @Inject TMDbService tmdbService;
+    @Inject
+    TMDbService tmdbService;
 
     /**
      * Movie category selector

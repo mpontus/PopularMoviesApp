@@ -1,4 +1,6 @@
-package com.mpontus.popularmoviesapp;
+package com.mpontus.popularmoviesapp.di;
+
+import com.mpontus.popularmoviesapp.MainActivity;
 
 import javax.inject.Singleton;
 

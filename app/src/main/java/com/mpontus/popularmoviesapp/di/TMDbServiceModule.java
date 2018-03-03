@@ -1,8 +1,9 @@
-package com.mpontus.popularmoviesapp;
+package com.mpontus.popularmoviesapp.di;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 
 import javax.inject.Singleton;
 
@@ -16,11 +17,11 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
-class TMDbServiceModule {
+public class TMDbServiceModule {
     private String mBaseUrl;
     private String mApiKey;
 
-    TMDbServiceModule(String baseUrl, String apiKey) {
+    public TMDbServiceModule(String baseUrl, String apiKey) {
         mBaseUrl = baseUrl;
         mApiKey = apiKey;
     }

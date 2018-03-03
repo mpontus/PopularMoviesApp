@@ -1,26 +1,26 @@
-package com.mpontus.popularmoviesapp;
+package com.mpontus.popularmoviesapp.tmdb;
 
 import java.util.List;
 
-class MovieListResponse {
+public class MovieListResponse {
 
     /**
      * The page index of the response in the paginated listing
      */
-    int page;
+    public int page;
 
     /**
      * The list of movies in the response
      */
-    List<Movie> results;
+    public List<Movie> results;
 
     /**
      * Total number of results in the paginated listing
      */
-    int totalResults;
+    public int totalResults;
 
     /**
      * Total number of pages in the paginated listing
      */
-    int totalPages;
+    public int totalPages;
 }

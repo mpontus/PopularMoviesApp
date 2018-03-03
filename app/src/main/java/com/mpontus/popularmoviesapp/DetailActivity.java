@@ -6,11 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
 import io.reactivex.annotations.Nullable;
 
 public class DetailActivity extends AppCompatActivity {

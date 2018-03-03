@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp;
+package com.mpontus.popularmoviesapp.tmdb;
 
 import android.net.Uri;
 import android.os.Parcel;
@@ -10,11 +10,11 @@ import java.util.Date;
 import java.util.List;
 
 
-class Movie implements Parcelable {
+public class Movie implements Parcelable {
 
-    public static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/";
+    private static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/";
 
-    enum PosterSize {
+    public enum PosterSize {
         W92 ("w92"),
         W154 ("w154"),
         W185 ("w185"),
@@ -35,7 +35,7 @@ class Movie implements Parcelable {
         }
     }
 
-    enum BackdropSize {
+    public enum BackdropSize {
         W300 ("w300"),
         W780 ("w780"),
         W1280 ("w1280"),
@@ -61,71 +61,69 @@ class Movie implements Parcelable {
     /**
      * Indicates whether the movie is adult-rated or not
      */
-    boolean adult;
+    public boolean adult;
 
     /**
      * Short synopsis of the movie
      */
-    String overview;
+    public String overview;
 
     /**
      * Release date
      */
-    private Date releaseDate;
+    public Date releaseDate;
 
     /**
      * List of ids referencing movie genres
      *
      * See: https://developers.themoviedb.org/3/genres/get-movie-list
      */
-    List<Integer> genreIds;
+    public List<Integer> genreIds;
 
     /**
      * Movie ID in the TMDb
      */
-    int id;
+    public int id;
 
     /**
      * Movie title in the original language
      */
-    String originalTitle;
+    public String originalTitle;
 
     /**
      * Original language of the movie
      */
-    String originalLanguage;
+    public String originalLanguage;
 
     /**
      * Movie title in the language specified in the request
      */
-    String title;
+    public String title;
 
     /**
      * Relative URL to the backdrop picture of the movie
      */
-    private String backdropPath;
+    public String backdropPath;
 
     /**
      * Popularity score of the movie
      */
-    float popularity;
+    public float popularity;
 
     /**
      * Number of votes cast for the movie by TMDb users
      */
-    int voteCount;
+    public int voteCount;
 
     /**
      * ???
-     *
-     * TODO: Find out what this attribute means
      */
-    boolean video;
+    public boolean video;
 
     /**
      * Average value of all votes cast for the movie by TMDB users
      */
-    float voteAverage;
+    public float voteAverage;
 
     public Movie() {
     }
@@ -135,7 +133,7 @@ class Movie implements Parcelable {
      *
      * @return
      */
-    int getReleaseYear() {
+    public int getReleaseYear() {
         Calendar c = Calendar.getInstance();
 
         c.setTime(releaseDate);
@@ -148,7 +146,7 @@ class Movie implements Parcelable {
      *
      * @return URL Poster url
      */
-    Uri getPosterUrl(PosterSize size) {
+    public Uri getPosterUrl(PosterSize size) {
         // TODO: Find a way to avoid hardcoding this string
         return Uri.parse(BASE_IMAGE_URL)
                 .buildUpon()
@@ -157,7 +155,7 @@ class Movie implements Parcelable {
                 .build();
     }
 
-    Uri getPosterUrl() {
+    public Uri getPosterUrl() {
         return getPosterUrl(PosterSize.ORIGINAL);
     }
 
@@ -166,7 +164,7 @@ class Movie implements Parcelable {
      *
      * @return URL Poster url
      */
-    Uri getBackdropUrl(BackdropSize size) {
+    public Uri getBackdropUrl(BackdropSize size) {
         // TODO: Find a way to avoid hardcoding this string
         return Uri.parse(BASE_IMAGE_URL)
                 .buildUpon()
@@ -175,7 +173,7 @@ class Movie implements Parcelable {
                 .build();
     }
 
-    Uri getBackdropUrl() {
+    public Uri getBackdropUrl() {
         return getBackdropUrl(BackdropSize.ORIGINAL);
     }
 

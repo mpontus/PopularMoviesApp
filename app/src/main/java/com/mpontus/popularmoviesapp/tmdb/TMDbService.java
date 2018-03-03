@@ -1,9 +1,9 @@
-package com.mpontus.popularmoviesapp;
+package com.mpontus.popularmoviesapp.tmdb;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 
-interface TMDbService {
+public interface TMDbService {
     @GET("movie/popular")
     Observable<MovieListResponse> getPopularMovies();
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

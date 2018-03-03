@@ -20,8 +20,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
-    private List<Movie> mMovies = new ArrayList<>();
     final private OnClickListener mOnClickListener;
+    private List<Movie> mMovies = new ArrayList<>();
 
     MovieListAdapter(OnClickListener onClickListener) {
         mOnClickListener = onClickListener;
@@ -62,10 +62,9 @@ class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHo
     final class MovieViewHolder extends RecyclerView.ViewHolder {
         final private Context mContext;
         final private OnClickListener mOnClickListener;
-
+        @BindView(R.id.ivPoster)
+        ImageView mPosterView;
         private Movie mMovie;
-
-        @BindView(R.id.ivPoster) ImageView mPosterView;
 
         MovieViewHolder(Context context, View itemView, OnClickListener onClickListener) {
             super(itemView);

@@ -12,120 +12,97 @@ import java.util.List;
 
 public class Movie implements Parcelable {
 
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
     private static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/";
-
-    public enum PosterSize {
-        W92 ("w92"),
-        W154 ("w154"),
-        W185 ("w185"),
-        W342 ("w342"),
-        W500 ("w500"),
-        W780 ("w780"),
-        ORIGINAL ("original");
-
-        private final String code;
-
-        PosterSize(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String toString() {
-            return this.code;
-        }
-    }
-
-    public enum BackdropSize {
-        W300 ("w300"),
-        W780 ("w780"),
-        W1280 ("w1280"),
-        ORIGINAL ("original");
-
-        private final String code;
-
-        BackdropSize(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String toString() {
-            return this.code;
-        }
-    }
-
+    /**
+     * Indicates whether the movie is adult-rated or not
+     */
+    public boolean adult;
+    /**
+     * Short synopsis of the movie
+     */
+    public String overview;
+    /**
+     * Release date
+     */
+    public Date releaseDate;
+    /**
+     * List of ids referencing movie genres
+     * <p>
+     * See: https://developers.themoviedb.org/3/genres/get-movie-list
+     */
+    public List<Integer> genreIds;
+    /**
+     * Movie ID in the TMDb
+     */
+    public int id;
+    /**
+     * Movie title in the original language
+     */
+    public String originalTitle;
+    /**
+     * Original language of the movie
+     */
+    public String originalLanguage;
+    /**
+     * Movie title in the language specified in the request
+     */
+    public String title;
+    /**
+     * Relative URL to the backdrop picture of the movie
+     */
+    public String backdropPath;
+    /**
+     * Popularity score of the movie
+     */
+    public float popularity;
+    /**
+     * Number of votes cast for the movie by TMDb users
+     */
+    public int voteCount;
+    /**
+     * ???
+     */
+    public boolean video;
+    /**
+     * Average value of all votes cast for the movie by TMDB users
+     */
+    public float voteAverage;
     /**
      * Relative image url of the movie's poster
      */
     private String posterPath;
 
-    /**
-     * Indicates whether the movie is adult-rated or not
-     */
-    public boolean adult;
-
-    /**
-     * Short synopsis of the movie
-     */
-    public String overview;
-
-    /**
-     * Release date
-     */
-    public Date releaseDate;
-
-    /**
-     * List of ids referencing movie genres
-     *
-     * See: https://developers.themoviedb.org/3/genres/get-movie-list
-     */
-    public List<Integer> genreIds;
-
-    /**
-     * Movie ID in the TMDb
-     */
-    public int id;
-
-    /**
-     * Movie title in the original language
-     */
-    public String originalTitle;
-
-    /**
-     * Original language of the movie
-     */
-    public String originalLanguage;
-
-    /**
-     * Movie title in the language specified in the request
-     */
-    public String title;
-
-    /**
-     * Relative URL to the backdrop picture of the movie
-     */
-    public String backdropPath;
-
-    /**
-     * Popularity score of the movie
-     */
-    public float popularity;
-
-    /**
-     * Number of votes cast for the movie by TMDb users
-     */
-    public int voteCount;
-
-    /**
-     * ???
-     */
-    public boolean video;
-
-    /**
-     * Average value of all votes cast for the movie by TMDB users
-     */
-    public float voteAverage;
-
     public Movie() {
+    }
+
+    protected Movie(Parcel in) {
+        this.posterPath = in.readString();
+        this.adult = in.readByte() != 0;
+        this.overview = in.readString();
+        long tmpReleaseDate = in.readLong();
+        this.releaseDate = tmpReleaseDate == -1 ? null : new Date(tmpReleaseDate);
+        this.genreIds = new ArrayList<>();
+        in.readList(this.genreIds, Integer.class.getClassLoader());
+        this.id = in.readInt();
+        this.originalTitle = in.readString();
+        this.originalLanguage = in.readString();
+        this.title = in.readString();
+        this.backdropPath = in.readString();
+        this.popularity = in.readFloat();
+        this.voteCount = in.readInt();
+        this.video = in.readByte() != 0;
+        this.voteAverage = in.readFloat();
     }
 
     /**
@@ -198,34 +175,42 @@ public class Movie implements Parcelable {
         dest.writeFloat(this.voteAverage);
     }
 
-    protected Movie(Parcel in) {
-        this.posterPath = in.readString();
-        this.adult = in.readByte() != 0;
-        this.overview = in.readString();
-        long tmpReleaseDate = in.readLong();
-        this.releaseDate = tmpReleaseDate == -1 ? null : new Date(tmpReleaseDate);
-        this.genreIds = new ArrayList<>();
-        in.readList(this.genreIds, Integer.class.getClassLoader());
-        this.id = in.readInt();
-        this.originalTitle = in.readString();
-        this.originalLanguage = in.readString();
-        this.title = in.readString();
-        this.backdropPath = in.readString();
-        this.popularity = in.readFloat();
-        this.voteCount = in.readInt();
-        this.video = in.readByte() != 0;
-        this.voteAverage = in.readFloat();
+    public enum PosterSize {
+        W92("w92"),
+        W154("w154"),
+        W185("w185"),
+        W342("w342"),
+        W500("w500"),
+        W780("w780"),
+        ORIGINAL("original");
+
+        private final String code;
+
+        PosterSize(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String toString() {
+            return this.code;
+        }
     }
 
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel source) {
-            return new Movie(source);
+    public enum BackdropSize {
+        W300("w300"),
+        W780("w780"),
+        W1280("w1280"),
+        ORIGINAL("original");
+
+        private final String code;
+
+        BackdropSize(String code) {
+            this.code = code;
         }
 
         @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
+        public String toString() {
+            return this.code;
         }
-    };
+    }
 }

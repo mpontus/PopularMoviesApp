@@ -18,11 +18,16 @@ public class DetailActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE = "EXTRA_MOVIE";
 
     @Nullable
-    @BindView(R.id.ivBackdrop) ImageView mBackdropView;
-    @BindView(R.id.ivPoster) ImageView mPosterView;
-    @BindView(R.id.tvTitle) TextView mTitleView;
-    @BindView(R.id.tvRating) TextView mRatingView;
-    @BindView(R.id.tvDescription) TextView mDescriptionView;
+    @BindView(R.id.ivBackdrop)
+    ImageView mBackdropView;
+    @BindView(R.id.ivPoster)
+    ImageView mPosterView;
+    @BindView(R.id.tvTitle)
+    TextView mTitleView;
+    @BindView(R.id.tvRating)
+    TextView mRatingView;
+    @BindView(R.id.tvDescription)
+    TextView mDescriptionView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

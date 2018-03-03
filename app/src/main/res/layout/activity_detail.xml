@@ -8,7 +8,6 @@
 
     <!-- Movie backdrop image for the background -->
     <ImageView
-        tools:ignore="ContentDescription"
         android:id="@+id/ivBackdrop"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -17,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@color/colorPrimary" />
+        app:srcCompat="@color/colorPrimary"
+        tools:ignore="ContentDescription" />
 
 
     <!-- Movie poster wrapped in a CardView -->
@@ -26,24 +26,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        app:cardElevation="6dp"
         app:layout_constraintBottom_toBottomOf="@+id/ivBackdrop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivBackdrop"
-        app:cardElevation="6dp">
+        app:layout_constraintTop_toBottomOf="@+id/ivBackdrop">
+
         <ImageView
-            android:contentDescription="@string/movie_poster"
             android:id="@+id/ivPoster"
-            android:adjustViewBounds="true"
-            android:scaleType="fitEnd"
             android:layout_width="96dp"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/movie_poster"
+            android:scaleType="fitEnd"
             app:srcCompat="@color/colorAccent"
-            tools:layout_height="144dp"/>
+            tools:layout_height="144dp" />
     </android.support.v7.widget.CardView>
 
     <!-- Semi-transparent movie title background -->
     <ImageView
-        tools:ignore="ContentDescription"
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -54,7 +54,8 @@
         app:layout_constraintEnd_toEndOf="@+id/ivBackdrop"
         app:layout_constraintStart_toEndOf="@+id/cvPoster"
         app:layout_constraintTop_toTopOf="@+id/tvTitle"
-        app:layout_constraintVertical_bias="0.64" />
+        app:layout_constraintVertical_bias="0.64"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tvTitle"

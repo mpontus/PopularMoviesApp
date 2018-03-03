@@ -52,74 +52,61 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
      */
     public static final int MAX_CARD_WIDTH = 144;
     public static final String SAVED_STATE_MOVIE_LIST_LAYOUT_MANAGER = "MOVIE_LIST_LAYOUT_MANAGER";
-
+    /**
+     * Recycler view adapter
+     */
+    private final MovieListAdapter mMovieListAdapter = new MovieListAdapter(this);
     /**
      * TMDb API client
      */
     @Inject
     TMDbService tmdbService;
-
     /**
      * Movie category selector
      */
     @BindView(R.id.spSortOrder)
     Spinner mSortOrderView;
-
     /**
      * Recycler view for movie listing
      */
     @BindView(R.id.rvMovies)
     RecyclerView mMovieListView;
-
     /**
      * Loading indicator
      */
     @BindView(R.id.progressBar)
     ProgressBar mLoadingIndicator;
-
     /**
      * Views to be visible when the phone is disconnected from network
      */
-    @BindViews({ R.id.tvNoConnectionHeadline, R.id.tvNoConnectionSubheading })
+    @BindViews({R.id.tvNoConnectionHeadline, R.id.tvNoConnectionSubheading})
     List<View> mViewsOffline;
-
     /**
      * Views to be visible while fetching the data
      */
-    @BindViews({ R.id.progressBar, R.id.spSortOrder })
+    @BindViews({R.id.progressBar, R.id.spSortOrder})
     List<View> mViewsFetching;
-
     /**
      * Views to be visible after the response is loaded
      */
-    @BindViews({ R.id.spSortOrder, R.id.rvMovies})
+    @BindViews({R.id.spSortOrder, R.id.rvMovies})
     List<View> mViewsLoaded;
-
-    /**
-     * Saved recycler view position
-     */
-    private Bundle mSavedInstanceState;
-
-    /**
-     * Recycler view adapter
-     */
-    private final MovieListAdapter mMovieListAdapter = new MovieListAdapter(this);
-
     /**
      * Current sort order selection
      */
     int mSortOrder;
-
     /**
      * Current network status
      */
     boolean mIsOnline;
-
     /**
      * Flag to signify that we are waiting for network connetion to fetch movies
      */
     boolean mWaitingForNetwork = false;
-
+    /**
+     * Saved recycler view position
+     */
+    private Bundle mSavedInstanceState;
     /**
      * Layout manager extracted in order to save recycler view position
      */
@@ -166,22 +153,22 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         // domain values and specify the details of mapping them to localized strings.
         SortOrderAdapter<Integer> sortOrderAdapter = new SortOrderAdapter<Integer>(this,
                 android.R.layout.simple_spinner_dropdown_item,
-                new Integer[]{ SORT_ORDER_POPULAR, SORT_ORDER_TOP_RATED }
-                ) {
-                    @Override
-                    String getLabel(int position) {
-                        switch (getItem(position)) {
-                            case SORT_ORDER_POPULAR:
-                                return getString(R.string.sort_order_popular);
+                new Integer[]{SORT_ORDER_POPULAR, SORT_ORDER_TOP_RATED}
+        ) {
+            @Override
+            String getLabel(int position) {
+                switch (getItem(position)) {
+                    case SORT_ORDER_POPULAR:
+                        return getString(R.string.sort_order_popular);
 
-                            case SORT_ORDER_TOP_RATED:
-                                return getString(R.string.sort_order_top_rated);
+                    case SORT_ORDER_TOP_RATED:
+                        return getString(R.string.sort_order_top_rated);
 
-                            default:
-                                throw new RuntimeException("Invalid selection");
-                        }
-                    }
-                };
+                    default:
+                        throw new RuntimeException("Invalid selection");
+                }
+            }
+        };
 
         mSortOrderView.setAdapter(sortOrderAdapter);
         mSortOrderView.setSelection(sortOrderAdapter.getPosition(mSortOrder));

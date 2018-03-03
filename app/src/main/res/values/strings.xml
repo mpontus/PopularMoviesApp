@@ -13,10 +13,8 @@
     <string name="no_connection_headline">No network connection</string>
     <string name="no_connection_subheading">Please connect to the network and try again</string>
 
-    <string-array name="movie_sort_order_options">
-        <item>Popular Movies</item>
-        <item>Top Rated Movies</item>
-    </string-array>
+    <string name="sort_order_popular">Popular Movies</string>
+    <string name="sort_order_top_rated">Top Rated Movies</string>
 
     <plurals name="numberOfVotes">
         <item quantity="one">%d vote</item>

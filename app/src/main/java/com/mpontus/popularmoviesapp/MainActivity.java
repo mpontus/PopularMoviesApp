@@ -10,46 +10,39 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.f2prateek.rx.preferences2.Preference;
-
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.OnItemSelected;
-import butterknife.Optional;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.Nullable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements MovieListAdapter.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final int SORT_ORDER_POPULAR = 1;
-    public static final int SORT_TOP_RATED = 2;
-
-    // TODO: Make correlation between those values and array of options in stirngs.xml more explicit
-    // E.g. Custom adapter as an inner class
-    public static final int[] SORT_ORDER_VALUES = {
-            SORT_ORDER_POPULAR,
-            SORT_TOP_RATED,
-    };
+    public static final int SORT_ORDER_TOP_RATED = 2;
 
     /**
      * Number of columns in the grid
@@ -162,13 +155,32 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         // Initialize movie sort order selector
-        ArrayAdapter<CharSequence> sortOrderAdapter =
-                ArrayAdapter.createFromResource(this, R.array.movie_sort_order_options,
-                        android.R.layout.simple_spinner_dropdown_item);
+        // When using array adapter I have to seve the localized strings in preferences, or
+        // implement mapping from adapter position to domain value in places distant from this piece
+        // of code.
+        // This is why I felt the need to implement custom adapter which allow me to operate with
+        // domain values and specify the details of mapping them to localized strings.
+        SortOrderAdapter<Integer> sortOrderAdapter = new SortOrderAdapter<Integer>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new Integer[]{ SORT_ORDER_POPULAR, SORT_ORDER_TOP_RATED }
+                ) {
+                    @Override
+                    String getLabel(int position) {
+                        switch (getItem(position)) {
+                            case SORT_ORDER_POPULAR:
+                                return getString(R.string.sort_order_popular);
+
+                            case SORT_ORDER_TOP_RATED:
+                                return getString(R.string.sort_order_top_rated);
+
+                            default:
+                                throw new RuntimeException("Invalid selection");
+                        }
+                    }
+                };
 
         mSortOrderView.setAdapter(sortOrderAdapter);
-        // TODO: Refactor sort order adapter
-        mSortOrderView.setSelection(mSortOrder == SORT_ORDER_POPULAR ? 0 : 1);
+        mSortOrderView.setSelection(sortOrderAdapter.getPosition(mSortOrder));
 
         // Initialize recycler view
         mMovieListLayoutManager = new GridLayoutManager(this, SPAN_COUNT);
@@ -208,11 +220,11 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
      */
     @OnItemSelected(R.id.spSortOrder)
     public void onItemSelected(Spinner spinner, int position) {
-        int value = SORT_ORDER_VALUES[position];
+        int value = (Integer) mSortOrderView.getItemAtPosition(position);
 
         switch (value) {
             case SORT_ORDER_POPULAR:
-            case SORT_TOP_RATED:
+            case SORT_ORDER_TOP_RATED:
                 PreferenceManager.getDefaultSharedPreferences(this)
                         .edit()
                         .putInt(getString(R.string.pref_sort_order_key), value)
@@ -327,5 +339,79 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
      */
     private ButterKnife.Action<View> setVisibility(int value) {
         return (view, index) -> view.setVisibility(value);
+    }
+
+    /**
+     * Abstract adapter for sort order spinner which allows to override the label rendering method
+     */
+    abstract class SortOrderAdapter<T> extends BaseAdapter {
+
+        private final LayoutInflater mInflater;
+        private final int mResource;
+        private final int mTextViewId;
+        private final List<T> mOptions;
+
+        SortOrderAdapter(Context context, @LayoutRes int resource, T[] options) {
+            this(context, resource, 0, options);
+        }
+
+        SortOrderAdapter(Context context, @LayoutRes int resource, @IdRes int textViewId, T[] options) {
+            mInflater = LayoutInflater.from(context);
+            mResource = resource;
+            mTextViewId = textViewId;
+            mOptions = Arrays.asList(options);
+        }
+
+        @Override
+        public int getCount() {
+            return mOptions.size();
+        }
+
+        @Override
+        public T getItem(int position) {
+            return mOptions.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            String label = this.getLabel(position);
+            final View view;
+            final TextView text;
+
+            if (convertView == null) {
+                view = mInflater.inflate(mResource, parent, false);
+            } else {
+                view = convertView;
+            }
+
+            try {
+                if (mTextViewId == 0) {
+                    text = (TextView) view;
+                } else {
+                    text = view.findViewById(mTextViewId);
+
+                    if (text == null) {
+                        throw new IllegalStateException("You must supply id of the text view");
+                    }
+                }
+            } catch (ClassCastException e) {
+                throw new IllegalStateException("You must supply text view resource id");
+            }
+
+            text.setText(label);
+
+            return view;
+        }
+
+        int getPosition(T value) {
+            return mOptions.indexOf(value);
+        }
+
+        abstract String getLabel(int position);
     }
 }

@@ -45,7 +45,8 @@ public class DetailActivity extends AppCompatActivity {
 
         String formattedRating = getString(R.string.movie_rating_format,
                 movie.voteAverage,
-                getResources().getQuantityString(R.plurals.numberOfVotes, movie.voteCount));
+                getResources().getQuantityString(R.plurals.numberOfVotes, movie.voteCount, movie.voteCount));
+
 
         mTitleView.setText(formattedTitle);
         mRatingView.setText(formattedRating);

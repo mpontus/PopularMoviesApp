@@ -10,26 +10,19 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.MovieListResponse;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -146,12 +139,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         // Initialize movie sort order selector
-        // When using array adapter I have to seve the localized strings in preferences, or
-        // implement mapping from adapter position to domain value in places distant from this piece
-        // of code.
-        // This is why I felt the need to implement custom adapter which allow me to operate with
-        // domain values and specify the details of mapping them to localized strings.
-        SortOrderAdapter<Integer> sortOrderAdapter = new SortOrderAdapter<Integer>(this,
+        ArrayAdapter<Integer> sortOrderAdapter = new ArrayAdapter<Integer>(this,
                 android.R.layout.simple_spinner_dropdown_item,
                 new Integer[]{SORT_ORDER_POPULAR, SORT_ORDER_TOP_RATED}
         ) {
@@ -338,77 +326,4 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         return (view, index) -> view.setVisibility(value);
     }
 
-    /**
-     * Abstract adapter for sort order spinner which allows to override the label rendering method
-     */
-    abstract class SortOrderAdapter<T> extends BaseAdapter {
-
-        private final LayoutInflater mInflater;
-        private final int mResource;
-        private final int mTextViewId;
-        private final List<T> mOptions;
-
-        SortOrderAdapter(Context context, @LayoutRes int resource, T[] options) {
-            this(context, resource, 0, options);
-        }
-
-        SortOrderAdapter(Context context, @LayoutRes int resource, @IdRes int textViewId, T[] options) {
-            mInflater = LayoutInflater.from(context);
-            mResource = resource;
-            mTextViewId = textViewId;
-            mOptions = Arrays.asList(options);
-        }
-
-        @Override
-        public int getCount() {
-            return mOptions.size();
-        }
-
-        @Override
-        public T getItem(int position) {
-            return mOptions.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            String label = this.getLabel(position);
-            final View view;
-            final TextView text;
-
-            if (convertView == null) {
-                view = mInflater.inflate(mResource, parent, false);
-            } else {
-                view = convertView;
-            }
-
-            try {
-                if (mTextViewId == 0) {
-                    text = (TextView) view;
-                } else {
-                    text = view.findViewById(mTextViewId);
-
-                    if (text == null) {
-                        throw new IllegalStateException("You must supply id of the text view");
-                    }
-                }
-            } catch (ClassCastException e) {
-                throw new IllegalStateException("You must supply text view resource id");
-            }
-
-            text.setText(label);
-
-            return view;
-        }
-
-        int getPosition(T value) {
-            return mOptions.indexOf(value);
-        }
-
-        abstract String getLabel(int position);
-    }
 }

@@ -269,9 +269,6 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         movieListResponseObservable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(error -> Toast.makeText(this, R.string.fetching_error_message, Toast.LENGTH_SHORT)
-                        .show())
-                .onErrorResumeNext(Observable.empty())
                 .subscribe(
                         response -> {
                             mMovieListAdapter.setMovies(response.results);

@@ -58,12 +58,12 @@ public class DetailActivity extends AppCompatActivity {
         mDescriptionView.setText(movie.overview);
 
         Picasso.with(this)
-                .load(movie.getPosterUrl(Movie.PosterSize.W780))
+                .load(movie.getPosterUrl(Movie.POSTER_SIZE_W780))
                 .into(mPosterView);
 
         if (mBackdropView != null) {
             Picasso.with(this)
-                    .load(movie.getBackdropUrl(Movie.BackdropSize.W780))
+                    .load(movie.getBackdropUrl(Movie.BACKDROP_SIZE_W780))
                     .into(mBackdropView);
         }
     }

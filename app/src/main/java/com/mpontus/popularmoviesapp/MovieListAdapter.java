@@ -85,7 +85,7 @@ class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHo
             mPosterView.setContentDescription(movie.title);
 
             Picasso.with(mContext)
-                    .load(movie.getPosterUrl(Movie.PosterSize.W342))
+                    .load(movie.getPosterUrl(Movie.POSTER_SIZE_W342))
                     .into(mPosterView);
         }
     }

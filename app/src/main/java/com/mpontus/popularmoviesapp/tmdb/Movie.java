@@ -3,7 +3,10 @@ package com.mpontus.popularmoviesapp.tmdb;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.StringDef;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,6 +14,30 @@ import java.util.List;
 
 
 public class Movie implements Parcelable {
+
+    public static final String POSTER_SIZE_W92 = "w92";
+    public static final String POSTER_SIZE_W154 = "w154";
+    public static final String POSTER_SIZE_W185 = "w185";
+    public static final String POSTER_SIZE_W342 = "w342";
+    public static final String POSTER_SIZE_W500 = "w500";
+    public static final String POSTER_SIZE_W780 = "w780";
+    public static final String POSTER_SIZE_ORIGINAL = "original";
+
+    @StringDef({POSTER_SIZE_W92, POSTER_SIZE_W154, POSTER_SIZE_W185, POSTER_SIZE_W342, POSTER_SIZE_W500, POSTER_SIZE_W780, POSTER_SIZE_ORIGINAL})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface PosterSize {
+    }
+
+
+    public static final String BACKDROP_SIZE_W300 = "W300";
+    public static final String BACKDROP_SIZE_W780 = "W780";
+    public static final String BACKDROP_SIZE_W1280 = "W1280";
+    public static final String BACKDROP_SIZE_ORIGINAL = "original";
+
+    @StringDef({BACKDROP_SIZE_W300, BACKDROP_SIZE_W780, BACKDROP_SIZE_W1280, BACKDROP_SIZE_ORIGINAL})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface BackdropSize {
+    }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
         @Override
@@ -121,7 +148,7 @@ public class Movie implements Parcelable {
      *
      * @return URL Poster url
      */
-    public Uri getPosterUrl(PosterSize size) {
+    public Uri getPosterUrl(@PosterSize String size) {
         // TODO: Find a way to avoid hardcoding this string
         return Uri.parse(BASE_IMAGE_URL)
                 .buildUpon()
@@ -131,7 +158,7 @@ public class Movie implements Parcelable {
     }
 
     public Uri getPosterUrl() {
-        return getPosterUrl(PosterSize.ORIGINAL);
+        return getPosterUrl(POSTER_SIZE_ORIGINAL);
     }
 
     /**
@@ -139,7 +166,7 @@ public class Movie implements Parcelable {
      *
      * @return URL Poster url
      */
-    public Uri getBackdropUrl(BackdropSize size) {
+    public Uri getBackdropUrl(@BackdropSize String size) {
         // TODO: Find a way to avoid hardcoding this string
         return Uri.parse(BASE_IMAGE_URL)
                 .buildUpon()
@@ -149,7 +176,7 @@ public class Movie implements Parcelable {
     }
 
     public Uri getBackdropUrl() {
-        return getBackdropUrl(BackdropSize.ORIGINAL);
+        return getBackdropUrl(BACKDROP_SIZE_ORIGINAL);
     }
 
     @Override
@@ -173,44 +200,5 @@ public class Movie implements Parcelable {
         dest.writeInt(this.voteCount);
         dest.writeByte(this.video ? (byte) 1 : (byte) 0);
         dest.writeFloat(this.voteAverage);
-    }
-
-    public enum PosterSize {
-        W92("w92"),
-        W154("w154"),
-        W185("w185"),
-        W342("w342"),
-        W500("w500"),
-        W780("w780"),
-        ORIGINAL("original");
-
-        private final String code;
-
-        PosterSize(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String toString() {
-            return this.code;
-        }
-    }
-
-    public enum BackdropSize {
-        W300("w300"),
-        W780("w780"),
-        W1280("w1280"),
-        ORIGINAL("original");
-
-        private final String code;
-
-        BackdropSize(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String toString() {
-            return this.code;
-        }
     }
 }

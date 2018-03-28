@@ -1,0 +1,23 @@
+package com.mpontus.popularmoviesapp.ui.MovieDetails;
+
+import com.mpontus.popularmoviesapp.tmdb.Movie;
+
+import dagger.Binds;
+import dagger.Module;
+import dagger.Provides;
+
+import static com.mpontus.popularmoviesapp.ui.MovieDetails.MovieDetailsActivity.EXTRA_MOVIE;
+
+@Module
+public abstract class MovieDetailsModule {
+    @Binds
+    abstract MovieDetailsContract.Presenter provideMovieDetailsPresenter(MovieDetailsPresenter presenter);
+
+    @Binds
+    abstract MovieDetailsContract.View provideMovieDetailsView(MovieDetailsActivity activity);
+
+    @Provides
+    static Movie provideMovie(MovieDetailsActivity activity) {
+        return (Movie) activity.getIntent().getParcelableExtra(EXTRA_MOVIE);
+    }
+}

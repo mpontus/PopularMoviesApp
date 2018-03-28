@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import com.mpontus.popularmoviesapp.DetailActivity;
+import com.mpontus.popularmoviesapp.ui.MovieDetails.MovieDetailsActivity;
 import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
@@ -159,9 +159,9 @@ public class MovieListActivity extends AppCompatActivity implements MovieListCon
 
     @Override
     public void openDetailActivity(Movie movie) {
-        Intent intent = new Intent(this, DetailActivity.class);
+        Intent intent = new Intent(this, MovieDetailsActivity.class);
 
-        intent.putExtra(DetailActivity.EXTRA_MOVIE, movie);
+        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE, movie);
 
         startActivity(intent);
     }

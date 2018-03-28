@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp;
+package com.mpontus.popularmoviesapp.ui.utils;
 
 
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -19,11 +20,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
+public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
     final private OnClickListener mOnClickListener;
     private List<Movie> mMovies = new ArrayList<>();
 
-    MovieListAdapter(OnClickListener onClickListener) {
+    public MovieListAdapter(OnClickListener onClickListener) {
         mOnClickListener = onClickListener;
     }
 
@@ -49,13 +50,13 @@ class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHo
         return mMovies.size();
     }
 
-    void setMovies(List<Movie> movies) {
+    public void setMovies(List<Movie> movies) {
         mMovies = movies;
 
         notifyDataSetChanged();
     }
 
-    interface OnClickListener {
+    public interface OnClickListener {
         void onClick(View v, Movie m);
     }
 

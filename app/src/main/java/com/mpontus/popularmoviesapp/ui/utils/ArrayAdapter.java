@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp;
+package com.mpontus.popularmoviesapp.ui.utils;
 
 import android.content.Context;
 import android.support.annotation.IdRes;
@@ -15,18 +15,18 @@ import java.util.List;
 /**
  * ListView Adapter with modifable rendering method
  */
-abstract class ArrayAdapter<T> extends BaseAdapter {
+public abstract class ArrayAdapter<T> extends BaseAdapter {
 
     private final LayoutInflater mInflater;
     private final int mResource;
     private final int mTextViewId;
     private final List<T> mOptions;
 
-    ArrayAdapter(Context context, @LayoutRes int resource, T[] options) {
+    public ArrayAdapter(Context context, @LayoutRes int resource, T[] options) {
         this(context, resource, 0, options);
     }
 
-    ArrayAdapter(Context context, @LayoutRes int resource, @IdRes int textViewId, T[] options) {
+    public ArrayAdapter(Context context, @LayoutRes int resource, @IdRes int textViewId, T[] options) {
         mInflater = LayoutInflater.from(context);
         mResource = resource;
         mTextViewId = textViewId;
@@ -79,9 +79,9 @@ abstract class ArrayAdapter<T> extends BaseAdapter {
         return view;
     }
 
-    int getPosition(T value) {
+    public int getPosition(T value) {
         return mOptions.indexOf(value);
     }
 
-    abstract String getLabel(int position);
+    public abstract String getLabel(int position);
 }

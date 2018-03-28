@@ -1,24 +1,13 @@
 package com.mpontus.popularmoviesapp;
 
-import android.app.Application;
+import com.mpontus.popularmoviesapp.di.DaggerAppComponent;
 
-import com.mpontus.popularmoviesapp.di.AppComponent;
-import com.mpontus.popularmoviesapp.di.TMDbServiceModule;
+import dagger.android.AndroidInjector;
+import dagger.android.DaggerApplication;
 
-public class PopularMoviesApplication extends Application {
-    private AppComponent appComponent;
-
+public class PopularMoviesApplication extends DaggerApplication {
     @Override
-    public void onCreate() {
-        super.onCreate();
-
-        appComponent = com.mpontus.popularmoviesapp.di.DaggerAppComponent.builder()
-                .tMDbServiceModule(new TMDbServiceModule(getString(R.string.tmdb_base_url),
-                        BuildConfig.TMDB_API_KEY))
-                .build();
-    }
-
-    public AppComponent getAppComponent() {
-        return appComponent;
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder().application(this).build();
     }
 }

@@ -1,13 +1,20 @@
 package com.mpontus.popularmoviesapp.di;
 
-import com.mpontus.popularmoviesapp.MainActivity;
+import android.app.Application;
 
-import javax.inject.Singleton;
+import com.mpontus.popularmoviesapp.PopularMoviesApplication;
 
+import dagger.BindsInstance;
 import dagger.Component;
+import dagger.android.AndroidInjector;
 
-@Singleton
-@Component(modules = TMDbServiceModule.class)
-public interface AppComponent {
-    void inject(MainActivity mainActivity);
+@Component(modules = {AppModule.class, ActivityBindingModule.class})
+public interface AppComponent extends AndroidInjector<PopularMoviesApplication> {
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        AppComponent.Builder application(Application application);
+
+        AppComponent build();
+    }
 }

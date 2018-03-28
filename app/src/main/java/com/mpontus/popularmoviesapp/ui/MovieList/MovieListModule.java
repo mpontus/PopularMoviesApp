@@ -7,4 +7,7 @@ import dagger.Module;
 public abstract class MovieListModule {
     @Binds
     abstract MovieListContract.Presenter provideMovieListPresenter(MovieListPresenter presenter);
+
+    @Binds
+    abstract MovieListContract.View provideMovieListView(MovieListActivity activity);
 }

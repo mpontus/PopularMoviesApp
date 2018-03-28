@@ -21,7 +21,7 @@ public interface MovieListContract {
     }
 
     interface Presenter {
-        void attach(MovieListContract.View view);
+        void attach();
 
         void onMovieSourceChange(TMDbService.MovieSource source);
 

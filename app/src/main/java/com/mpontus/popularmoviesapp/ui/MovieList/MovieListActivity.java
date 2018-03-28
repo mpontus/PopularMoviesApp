@@ -122,7 +122,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListCon
         mMovieListView.setAdapter(mMovieListAdapter);
         mMovieListView.setLayoutManager(mMovieListLayoutManager);
 
-        mPresenter.attach(this);
+        mPresenter.attach();
     }
 
     public void setMovieSource(TMDbService.MovieSource source) {

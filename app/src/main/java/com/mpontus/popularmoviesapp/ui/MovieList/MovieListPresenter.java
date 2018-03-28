@@ -28,19 +28,19 @@ public class MovieListPresenter implements MovieListContract.Presenter {
     private boolean mRequestPending;
 
     @Inject
-    MovieListPresenter(AppApiHelper repository,
+    MovieListPresenter(MovieListContract.View view,
+                       AppApiHelper repository,
                        AppConnetivityHelper networkStateHelper,
                        AppPreferencesHelper preferencesHelper,
                        @Named("MAIN") Scheduler mainThreadScheduler) {
+        mView = view;
         mApiHelper = repository;
         mConnectivityHelper = networkStateHelper;
         mPreferencesHelper = preferencesHelper;
         mMainThreadScheduler = mainThreadScheduler;
     }
 
-    public void attach(MovieListContract.View view) {
-        mView = view;
-
+    public void attach() {
         mConnectivityHelper.onOnlineStatusChange(isOnline -> {
             if (isOnline) {
                 if (mLoadWhenOnline) {

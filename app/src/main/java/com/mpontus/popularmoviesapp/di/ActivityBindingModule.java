@@ -8,6 +8,7 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ActivityBindingModule {
+    @ActivityScoped
     @ContributesAndroidInjector(modules = MovieListModule.class)
     abstract MovieListActivity moveListActivity();
 }

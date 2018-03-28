@@ -2,11 +2,13 @@ package com.mpontus.popularmoviesapp.data.preferences;
 
 import android.content.SharedPreferences;
 
+import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 
 import javax.inject.Inject;
 
-class AppPreferencesHelper implements PreferencesHelper {
+@ActivityScoped
+public class AppPreferencesHelper implements PreferencesHelper {
 
     private static final String PREF_KEY_MOVIE_SOURCE = "PREF_KEY_MOVIE_SOURCE";
 

@@ -8,8 +8,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 
+import com.mpontus.popularmoviesapp.di.ActivityScoped;
+
 import javax.inject.Inject;
 
+@ActivityScoped
 public class AppConnetivityHelper implements ConnectivityHelper {
 
     private final Context mContext;

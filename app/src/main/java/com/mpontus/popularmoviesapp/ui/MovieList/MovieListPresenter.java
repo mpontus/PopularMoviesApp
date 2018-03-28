@@ -1,30 +1,46 @@
 package com.mpontus.popularmoviesapp.ui.MovieList;
 
+import com.mpontus.popularmoviesapp.data.connectivity.AppConnetivityHelper;
 import com.mpontus.popularmoviesapp.data.connectivity.ConnectivityHelper;
 import com.mpontus.popularmoviesapp.data.network.ApiHelper;
+import com.mpontus.popularmoviesapp.data.network.AppApiHelper;
+import com.mpontus.popularmoviesapp.data.preferences.AppPreferencesHelper;
 import com.mpontus.popularmoviesapp.data.preferences.PreferencesHelper;
+import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import io.reactivex.Scheduler;
+
+@ActivityScoped
 public class MovieListPresenter implements MovieListContract.Presenter {
     private final ApiHelper mApiHelper;
     private final ConnectivityHelper mConnectivityHelper;
     private final PreferencesHelper mPreferencesHelper;
+    private final Scheduler mMainThreadScheduler;
 
     private MovieListContract.View mView;
 
     private boolean mLoadWhenOnline;
     private boolean mRequestPending;
 
-    public MovieListPresenter(ApiHelper repository,
-                              ConnectivityHelper networkStateHelper,
-                              PreferencesHelper preferencesHelper) {
-        this.mApiHelper = repository;
-        this.mConnectivityHelper = networkStateHelper;
-        this.mPreferencesHelper = preferencesHelper;
+    @Inject
+    MovieListPresenter(AppApiHelper repository,
+                       AppConnetivityHelper networkStateHelper,
+                       AppPreferencesHelper preferencesHelper,
+                       @Named("MAIN") Scheduler mainThreadScheduler) {
+        mApiHelper = repository;
+        mConnectivityHelper = networkStateHelper;
+        mPreferencesHelper = preferencesHelper;
+        mMainThreadScheduler = mainThreadScheduler;
     }
 
     public void attach(MovieListContract.View view) {
+        mView = view;
+
         mConnectivityHelper.onOnlineStatusChange(isOnline -> {
             if (isOnline) {
                 if (mLoadWhenOnline) {
@@ -61,14 +77,16 @@ public class MovieListPresenter implements MovieListContract.Presenter {
 
         mView.showLoading();
 
-        mApiHelper.getMovies(source).subscribe(movies -> {
-            mRequestPending = false;
-            mLoadWhenOnline = false;
+        mApiHelper.getMovies(source)
+                .observeOn(mMainThreadScheduler)
+                .subscribe(movies -> {
+                    mRequestPending = false;
+                    mLoadWhenOnline = false;
 
-            mView.setMovies(movies);
+                    mView.setMovies(movies);
 
-            mView.showMovies();
-        });
+                    mView.showMovies();
+                });
     }
 
     public void onMovieSourceChange(TMDbService.MovieSource source) {

@@ -1,11 +1,9 @@
-package com.mpontus.popularmoviesapp.di;
+package com.mpontus.popularmoviesapp.tmdb;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mpontus.popularmoviesapp.tmdb.TMDbService;
-
-import javax.inject.Singleton;
+import com.mpontus.popularmoviesapp.BuildConfig;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,33 +16,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class TMDbServiceModule {
-    private final String mBaseUrl;
-    private final String mApiKey;
-
-    public TMDbServiceModule(String baseUrl, String apiKey) {
-        mBaseUrl = baseUrl;
-        mApiKey = apiKey;
-    }
-
     @Provides
-    @Singleton
-    Gson provideGson() {
-        return new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .setDateFormat("yyyy-MM-dd")
-                .create();
-    }
-
-    @Provides
-    @Singleton
-    OkHttpClient provideOkHttpClient() {
-        return new OkHttpClient.Builder()
+    TMDbService provideTMDbService() {
+        OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request originalRequest = chain.request();
                     HttpUrl originalUrl = originalRequest.url();
 
                     HttpUrl resultUrl = originalUrl.newBuilder()
-                            .addQueryParameter("api_key", mApiKey)
+                            .addQueryParameter("api_key", BuildConfig.TMDB_API_KEY)
                             .build();
 
                     Request resultRequest = originalRequest.newBuilder()
@@ -54,22 +34,19 @@ public class TMDbServiceModule {
                     return chain.proceed(resultRequest);
                 })
                 .build();
-    }
 
-    @Provides
-    @Singleton
-    Retrofit provideRetrofit(OkHttpClient client, Gson gson) {
-        return new Retrofit.Builder()
-                .baseUrl(mBaseUrl)
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setDateFormat("yyyy-MM-dd")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.themoviedb.org/3/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-    }
 
-    @Provides
-    @Singleton
-    TMDbService provideTMDbService(Retrofit retrofit) {
         return retrofit.create(TMDbService.class);
     }
 }

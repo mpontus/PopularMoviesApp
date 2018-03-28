@@ -1,12 +1,10 @@
 package com.mpontus.popularmoviesapp.data.connectivity;
 
+import dagger.Binds;
 import dagger.Module;
-import dagger.Provides;
 
 @Module
-public class ConnectivityHelperModule {
-    @Provides
-    ConnectivityHelper getConnectivityHelper(AppConnetivityHelper connetivityHelper) {
-        return connetivityHelper;
-    }
+public abstract class ConnectivityHelperModule {
+    @Binds
+    abstract ConnectivityHelper getConnectivityHelper(AppConnetivityHelper connetivityHelper);
 }

@@ -89,7 +89,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListCon
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_movie_list);
         ButterKnife.bind(this);
 
         // Store saved instance state to be used after populating the movie list adapter

@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Scheduler;
+import io.reactivex.disposables.CompositeDisposable;
 
 @ActivityScoped
 public class MovieListPresenter implements MovieListContract.Presenter {
@@ -21,9 +22,12 @@ public class MovieListPresenter implements MovieListContract.Presenter {
     private final ConnectivityHelper mConnectivityHelper;
     private final PreferencesHelper mPreferencesHelper;
     private final Scheduler mMainThreadScheduler;
+    private final CompositeDisposable mCompositeDisposable;
 
     private MovieListContract.View mView;
 
+    private boolean mOnline;
+    private TMDbService.MovieSource mMovieSource;
     private boolean mLoadWhenOnline;
     private boolean mRequestPending;
 
@@ -38,32 +42,41 @@ public class MovieListPresenter implements MovieListContract.Presenter {
         mConnectivityHelper = networkStateHelper;
         mPreferencesHelper = preferencesHelper;
         mMainThreadScheduler = mainThreadScheduler;
+        mCompositeDisposable = new CompositeDisposable();
     }
 
     public void attach() {
-        mConnectivityHelper.onOnlineStatusChange(isOnline -> {
-            if (isOnline) {
-                if (mLoadWhenOnline) {
-                    load();
-                }
-            } else {
-                if (mRequestPending) {
-                    mView.showOffline();
-                }
-            }
-        });
+        mCompositeDisposable.add(
+                mConnectivityHelper.getIsOnline().subscribe(isOnline -> {
+                    mOnline = isOnline;
 
-        mPreferencesHelper.onMovieSourceChange(this::load);
+                    if (isOnline) {
+                        if (mLoadWhenOnline) {
+                            load(mMovieSource);
+                        }
+                    } else {
+                        if (mRequestPending) {
+                            mView.showOffline();
+                        }
+                    }
+                })
+        );
 
-        load();
+        mCompositeDisposable.add(
+                mPreferencesHelper.getMovieSource().subscribe(movieSource -> {
+                    mMovieSource = movieSource;
+
+                    this.load(movieSource);
+                })
+        );
     }
 
-    private void load() {
-        load(mPreferencesHelper.getMovieSource());
+    public void detach() {
+        mCompositeDisposable.dispose();
     }
 
     private void load(TMDbService.MovieSource source) {
-        if (!mConnectivityHelper.isOnline()) {
+        if (!mOnline) {
             // Set the flag which will start loading when we come back online.
             mLoadWhenOnline = true;
 

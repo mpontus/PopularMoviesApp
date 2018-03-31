@@ -11,10 +11,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import com.mpontus.popularmoviesapp.ui.MovieDetails.MovieDetailsActivity;
 import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
+import com.mpontus.popularmoviesapp.ui.MovieDetails.MovieDetailsActivity;
 import com.mpontus.popularmoviesapp.ui.utils.ArrayAdapter;
 import com.mpontus.popularmoviesapp.ui.utils.MovieListAdapter;
 
@@ -123,6 +123,13 @@ public class MovieListActivity extends AppCompatActivity implements MovieListCon
         mMovieListView.setLayoutManager(mMovieListLayoutManager);
 
         mPresenter.attach();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        mPresenter.detach();
     }
 
     public void setMovieSource(TMDbService.MovieSource source) {

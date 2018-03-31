@@ -23,6 +23,8 @@ public interface MovieListContract {
     interface Presenter {
         void attach();
 
+        void detach();
+
         void onMovieSourceChange(TMDbService.MovieSource source);
 
         void onMovieClick(Movie movie);

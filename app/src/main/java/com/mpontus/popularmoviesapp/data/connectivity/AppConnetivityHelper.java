@@ -12,6 +12,8 @@ import com.mpontus.popularmoviesapp.di.ActivityScoped;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+
 @ActivityScoped
 public class AppConnetivityHelper implements ConnectivityHelper {
 
@@ -26,28 +28,31 @@ public class AppConnetivityHelper implements ConnectivityHelper {
         mConnectivityManager = connectivityManager;
     }
 
-    @Override
-    public boolean isOnline() {
+    public Observable<Boolean> getIsOnline() {
         if (mConnectivityManager == null) {
-            return false;
+            return Observable.just(false);
         }
 
         NetworkInfo networkInfo = mConnectivityManager.getActiveNetworkInfo();
 
-        return networkInfo != null && networkInfo.isConnected();
+        return getBroadcasts(new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+                .map(intent -> !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,
+                        false))
+                .startWith(networkInfo != null && networkInfo.isConnected());
     }
 
-    // TODO: This receiver will need to be unregistered at some point
-    // Maybe by using activity context?
-    @Override
-    public void onOnlineStatusChange(OnlineStatusChangeListener listener) {
-        mContext.registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                boolean isOffline = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+    private Observable<Intent> getBroadcasts(IntentFilter intentFilter) {
+        return Observable.create(emitter -> {
+            BroadcastReceiver receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    emitter.onNext(intent);
+                }
+            };
 
-                listener.onOnlineStatusChange(!isOffline);
-            }
-        }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+            emitter.setCancellable(() -> mContext.unregisterReceiver(receiver));
+
+            mContext.registerReceiver(receiver, intentFilter);
+        });
     }
 }

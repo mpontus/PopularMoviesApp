@@ -2,12 +2,15 @@ package com.mpontus.popularmoviesapp.data.preferences;
 
 import android.content.SharedPreferences;
 
-import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-@ActivityScoped
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+
+@Singleton
 public class AppPreferencesHelper implements PreferencesHelper {
 
     private static final String PREF_KEY_MOVIE_SOURCE = "PREF_KEY_MOVIE_SOURCE";
@@ -19,28 +22,24 @@ public class AppPreferencesHelper implements PreferencesHelper {
         mPreferences = preferences;
     }
 
-    @Override
-    public TMDbService.MovieSource getMovieSource() {
-        return TMDbService.MovieSource.fromValue(
-                mPreferences.getInt(PREF_KEY_MOVIE_SOURCE, 0)
-        );
+    public Observable<TMDbService.MovieSource> getMovieSource() {
+        Observable<String> keyChanges = Observable.create((ObservableOnSubscribe<String>) emitter -> {
+            final SharedPreferences.OnSharedPreferenceChangeListener listener =
+                    (sharedPreferences, key) -> emitter.onNext(key);
+
+            emitter.setCancellable(() -> mPreferences.unregisterOnSharedPreferenceChangeListener(listener));
+
+            mPreferences.registerOnSharedPreferenceChangeListener(listener);
+        }).startWith(PREF_KEY_MOVIE_SOURCE);
+
+
+        return keyChanges.filter(key -> key.equals(PREF_KEY_MOVIE_SOURCE))
+                .map(s -> mPreferences.getInt(PREF_KEY_MOVIE_SOURCE, -1))
+                .map(TMDbService.MovieSource::fromValue);
     }
 
     @Override
     public void setMovieSource(TMDbService.MovieSource source) {
         mPreferences.edit().putInt(PREF_KEY_MOVIE_SOURCE, source.getValue()).apply();
-    }
-
-    @Override
-    public void onMovieSourceChange(OnPreferenceChangeListener<TMDbService.MovieSource> listener) {
-        mPreferences.registerOnSharedPreferenceChangeListener(
-                (sharedPreferences, key) -> {
-                    if (!key.equals(PREF_KEY_MOVIE_SOURCE)) {
-                        return;
-                    }
-
-                    listener.onPreferenceChange(getMovieSource());
-                }
-        );
     }
 }

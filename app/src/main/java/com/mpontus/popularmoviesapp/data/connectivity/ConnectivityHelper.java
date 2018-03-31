@@ -1,11 +1,7 @@
 package com.mpontus.popularmoviesapp.data.connectivity;
 
+import io.reactivex.Observable;
+
 public interface ConnectivityHelper {
-    boolean isOnline();
-
-    void onOnlineStatusChange(OnlineStatusChangeListener listener);
-
-    public interface OnlineStatusChangeListener {
-        void onOnlineStatusChange(boolean isOnline);
-    }
+    Observable<Boolean> getIsOnline();
 }

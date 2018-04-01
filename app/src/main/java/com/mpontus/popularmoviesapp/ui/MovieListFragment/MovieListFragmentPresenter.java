@@ -4,8 +4,6 @@ import com.mpontus.popularmoviesapp.data.connectivity.AppConnetivityHelper;
 import com.mpontus.popularmoviesapp.data.connectivity.ConnectivityHelper;
 import com.mpontus.popularmoviesapp.data.network.ApiHelper;
 import com.mpontus.popularmoviesapp.data.network.AppApiHelper;
-import com.mpontus.popularmoviesapp.data.preferences.AppPreferencesHelper;
-import com.mpontus.popularmoviesapp.data.preferences.PreferencesHelper;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
@@ -20,7 +18,6 @@ import io.reactivex.disposables.CompositeDisposable;
 public class MovieListFragmentPresenter implements MovieListFragmentContract.Presenter {
     private final ApiHelper mApiHelper;
     private final ConnectivityHelper mConnectivityHelper;
-    private final PreferencesHelper mPreferencesHelper;
     private final Scheduler mMainThreadScheduler;
     private final CompositeDisposable mCompositeDisposable;
 
@@ -28,21 +25,21 @@ public class MovieListFragmentPresenter implements MovieListFragmentContract.Pre
 
     private boolean mOnline;
     private TMDbService.MovieSource mMovieSource;
-    private boolean mLoadWhenOnline;
-    private boolean mRequestPending;
+    private boolean mLoadWhenOnline = true;
+    private boolean mRequestPending = false;
 
     @Inject
     MovieListFragmentPresenter(MovieListFragmentContract.View view,
                                AppApiHelper repository,
                                AppConnetivityHelper networkStateHelper,
-                               AppPreferencesHelper preferencesHelper,
-                               @Named("MAIN") Scheduler mainThreadScheduler) {
+                               @Named("MAIN") Scheduler mainThreadScheduler,
+                               TMDbService.MovieSource movieSource) {
         mView = view;
         mApiHelper = repository;
         mConnectivityHelper = networkStateHelper;
-        mPreferencesHelper = preferencesHelper;
         mMainThreadScheduler = mainThreadScheduler;
         mCompositeDisposable = new CompositeDisposable();
+        mMovieSource = movieSource;
     }
 
     public void attach() {
@@ -59,14 +56,6 @@ public class MovieListFragmentPresenter implements MovieListFragmentContract.Pre
                             mView.showOffline();
                         }
                     }
-                })
-        );
-
-        mCompositeDisposable.add(
-                mPreferencesHelper.getMovieSource().subscribe(movieSource -> {
-                    mMovieSource = movieSource;
-
-                    this.load(movieSource);
                 })
         );
     }
@@ -100,10 +89,6 @@ public class MovieListFragmentPresenter implements MovieListFragmentContract.Pre
 
                     mView.showMovies();
                 });
-    }
-
-    public void onMovieSourceChange(TMDbService.MovieSource source) {
-        mPreferencesHelper.setMovieSource(source);
     }
 
     public void onMovieClick(Movie movie) {

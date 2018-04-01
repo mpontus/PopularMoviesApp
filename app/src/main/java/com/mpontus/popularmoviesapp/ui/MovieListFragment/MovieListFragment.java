@@ -13,14 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 
 import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 import com.mpontus.popularmoviesapp.ui.MovieDetails.MovieDetailsActivity;
-import com.mpontus.popularmoviesapp.ui.utils.ArrayAdapter;
 import com.mpontus.popularmoviesapp.ui.utils.MovieListAdapter;
 
 import java.util.List;
@@ -36,6 +34,16 @@ import dagger.android.support.DaggerFragment;
 public class MovieListFragment extends DaggerFragment implements MovieListFragmentContract.View, MovieListAdapter.OnClickListener {
     public static final String ARG_MOVIE_SOURCE = "MOVIE_SOURCE";
 
+    public static MovieListFragment newInstance(TMDbService.MovieSource source) {
+        MovieListFragment fragment = new MovieListFragment();
+        Bundle args = new Bundle();
+
+        args.putInt(ARG_MOVIE_SOURCE, source.getValue());
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Inject
     MovieListFragmentContract.Presenter mPresenter;
 
@@ -48,16 +56,7 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
      * Recycler view adapter
      */
     private MovieListAdapter mMovieListAdapter;
-    /**
-     * Movie source selector spinner adapter
-     */
-    private ArrayAdapter<TMDbService.MovieSource> mSortOrderAdapter;
 
-    /**
-     * Movie category selector
-     */
-    @BindView(R.id.spSortOrder)
-    Spinner mSortOrderView;
     /**
      * Recycler view for movie listing
      */
@@ -76,12 +75,12 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
     /**
      * Views to be visible while fetching the data
      */
-    @BindViews({R.id.progressBar, R.id.spSortOrder})
+    @BindViews({R.id.progressBar})
     List<View> mViewsFetching;
     /**
      * Views to be visible after the response is loaded
      */
-    @BindViews({R.id.spSortOrder, R.id.rvMovies})
+    @BindViews({R.id.rvMovies})
     List<View> mViewsLoaded;
     /**
      * Saved recycler view position
@@ -138,10 +137,6 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
         mPresenter.detach();
     }
 
-    public void setMovieSource(TMDbService.MovieSource source) {
-        mSortOrderView.setSelection(mSortOrderAdapter.getPosition(source));
-    }
-
     @Override
     public void showOffline() {
         ButterKnife.apply(mViewsOffline, setVisibility(View.VISIBLE));
@@ -193,7 +188,7 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
      * Save the position of the recycler view
      */
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         Parcelable movieListLayoutManagerState = mMovieListLayoutManager.onSaveInstanceState();
 
         outState.putParcelable(SAVED_STATE_MOVIE_LIST_LAYOUT_MANAGER, movieListLayoutManagerState);

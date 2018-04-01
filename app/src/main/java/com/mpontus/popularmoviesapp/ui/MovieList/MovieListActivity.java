@@ -3,11 +3,12 @@ package com.mpontus.popularmoviesapp.ui.MovieList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.mpontus.popularmoviesapp.R;
+import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 import com.mpontus.popularmoviesapp.ui.MovieListFragment.MovieListFragment;
+import com.mpontus.popularmoviesapp.ui.utils.ArrayPagerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,17 +26,22 @@ public class MovieListActivity extends DaggerAppCompatActivity {
         setContentView(R.layout.activity_movie_list);
         ButterKnife.bind(this);
 
-        mPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return new MovieListFragment();
-            }
+        mPager.setAdapter(new ArrayPagerAdapter(getSupportFragmentManager(),
+                new Fragment[]{MovieListFragment.newInstance(TMDbService.MovieSource.TOP_RATED),
+                        MovieListFragment.newInstance(TMDbService.MovieSource.POPULAR)},
+                new String[]{"Top Rated", "Popular"}));
 
-            @Override
-            public int getCount() {
-                return 1;
-            }
-        });
+//        mPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+//            @Override
+//            public Fragment getItem(int position) {
+//                return MovieListFragment.newInstance(TMDbService.MovieSource.TOP_RATED);
+//            }
+//
+//            @Override
+//            public int getCount() {
+//                return 1;
+//            }
+//        });
 
     }
 }

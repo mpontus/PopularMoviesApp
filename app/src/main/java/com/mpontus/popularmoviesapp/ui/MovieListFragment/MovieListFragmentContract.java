@@ -1,7 +1,6 @@
 package com.mpontus.popularmoviesapp.ui.MovieListFragment;
 
 import com.mpontus.popularmoviesapp.tmdb.Movie;
-import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 
 import java.util.List;
 
@@ -22,8 +21,6 @@ public interface MovieListFragmentContract {
         void attach();
 
         void detach();
-
-        void onMovieSourceChange(TMDbService.MovieSource source);
 
         void onMovieClick(Movie movie);
     }

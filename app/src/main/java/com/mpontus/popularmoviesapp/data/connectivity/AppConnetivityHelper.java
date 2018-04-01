@@ -37,8 +37,7 @@ public class AppConnetivityHelper implements ConnectivityHelper {
 
         return getBroadcasts(new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
                 .map(intent -> !intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,
-                        false))
-                .startWith(networkInfo != null && networkInfo.isConnected());
+                        false));
     }
 
     private Observable<Intent> getBroadcasts(IntentFilter intentFilter) {

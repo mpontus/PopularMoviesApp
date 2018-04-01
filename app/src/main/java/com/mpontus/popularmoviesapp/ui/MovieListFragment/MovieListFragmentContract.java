@@ -1,19 +1,17 @@
-package com.mpontus.popularmoviesapp.ui.MovieList;
+package com.mpontus.popularmoviesapp.ui.MovieListFragment;
 
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 
 import java.util.List;
 
-public interface MovieListContract {
+public interface MovieListFragmentContract {
     interface View {
         void showOffline();
 
         void showLoading();
 
         void showMovies();
-
-        void setMovieSource(TMDbService.MovieSource source);
 
         void setMovies(List<Movie> movies);
 

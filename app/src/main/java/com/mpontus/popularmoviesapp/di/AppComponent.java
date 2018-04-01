@@ -10,6 +10,8 @@ import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import dagger.android.AndroidInjector;
+import dagger.android.support.AndroidSupportInjectionModule;
 
 @Singleton
 @Component(modules = {
@@ -17,8 +19,9 @@ import dagger.Component;
         ActivityBindingModule.class,
         TMDbServiceModule.class,
         SchedulersModule.class,
+        AndroidSupportInjectionModule.class,
 })
-public interface AppComponent {
+public interface AppComponent extends AndroidInjector<PopularMoviesApplication> {
     @Component.Builder
     interface Builder {
         @BindsInstance
@@ -26,6 +29,4 @@ public interface AppComponent {
 
         AppComponent build();
     }
-
-    void inject(PopularMoviesApplication app);
 }

@@ -1,13 +1,16 @@
 package com.mpontus.popularmoviesapp.ui.MovieList;
 
-import dagger.Binds;
+
+import com.mpontus.popularmoviesapp.di.FragmentScoped;
+import com.mpontus.popularmoviesapp.ui.MovieListFragment.MovieListFragment;
+import com.mpontus.popularmoviesapp.ui.MovieListFragment.MovieListFragmentModule;
+
 import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class MovieListModule {
-    @Binds
-    abstract MovieListContract.Presenter provideMovieListPresenter(MovieListPresenter presenter);
-
-    @Binds
-    abstract MovieListContract.View provideMovieListView(MovieListActivity activity);
+    @FragmentScoped
+    @ContributesAndroidInjector(modules = MovieListFragmentModule.class)
+    abstract MovieListFragment movieListFragment();
 }

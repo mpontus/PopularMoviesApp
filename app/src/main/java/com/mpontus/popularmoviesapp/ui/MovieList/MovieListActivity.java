@@ -2,6 +2,7 @@ package com.mpontus.popularmoviesapp.ui.MovieList;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
@@ -19,6 +20,9 @@ public class MovieListActivity extends DaggerAppCompatActivity {
     @BindView(R.id.pager)
     ViewPager mPager;
 
+    @BindView(R.id.tabs)
+    TabLayout mTabs;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,22 +30,13 @@ public class MovieListActivity extends DaggerAppCompatActivity {
         setContentView(R.layout.activity_movie_list);
         ButterKnife.bind(this);
 
+        // TODO: Investigate injecting Fragments using multifactories
+        // see https://frogermcs.github.io/inject-everything-viewholder-and-dagger-2-example/#multibinding
         mPager.setAdapter(new ArrayPagerAdapter(getSupportFragmentManager(),
                 new Fragment[]{MovieListFragment.newInstance(TMDbService.MovieSource.TOP_RATED),
                         MovieListFragment.newInstance(TMDbService.MovieSource.POPULAR)},
                 new String[]{"Top Rated", "Popular"}));
 
-//        mPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-//            @Override
-//            public Fragment getItem(int position) {
-//                return MovieListFragment.newInstance(TMDbService.MovieSource.TOP_RATED);
-//            }
-//
-//            @Override
-//            public int getCount() {
-//                return 1;
-//            }
-//        });
-
+        mTabs.setupWithViewPager(mPager);
     }
 }

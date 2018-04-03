@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
+import android.view.WindowManager;
 
 import javax.inject.Singleton;
 
@@ -31,6 +32,12 @@ public class AppModule {
     @Singleton
     SharedPreferences provideSharedPreferences(@ApplicationContext Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Provides
+    @Singleton
+    WindowManager provideWindowManager(@ApplicationContext Context context) {
+        return (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     }
 
     @Provides

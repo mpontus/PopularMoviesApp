@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,16 +28,6 @@ import dagger.android.support.DaggerFragment;
 public class MovieListFragment extends DaggerFragment implements MovieListFragmentContract.View {
     public static final String ARG_MOVIE_SOURCE = "MOVIE_SOURCE";
 
-    public static MovieListFragment newInstance(TMDbService.MovieSource source) {
-        MovieListFragment fragment = new MovieListFragment();
-        Bundle args = new Bundle();
-
-        args.putInt(ARG_MOVIE_SOURCE, source.getValue());
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
     @Inject
     MovieListFragmentContract.Presenter mPresenter;
 
@@ -47,12 +35,22 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
      * Number of columns in the grid
      */
     public static final int MAX_CARD_WIDTH = 144;
+
+    /**
+     * Key for the saved state bundle for saving recycler view position
+     */
     public static final String SAVED_STATE_MOVIE_LIST_LAYOUT_MANAGER = "MOVIE_LIST_LAYOUT_MANAGER";
     /**
      * Recycler view adapter
      */
     @Inject
     MovieListAdapter mMovieListAdapter;
+
+    /**
+     * Recycler view layout manager
+     */
+    @Inject
+    MovieListLayoutManager mMovieListLayoutManager;
 
     /**
      * Recycler view for movie listing
@@ -83,10 +81,19 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
      * Saved recycler view position
      */
     private Bundle mSavedInstanceState;
+
     /**
-     * Layout manager extracted in order to save recycler view position
+     * Create new fragment instance for the given movie source
      */
-    private RecyclerView.LayoutManager mMovieListLayoutManager;
+    public static MovieListFragment newInstance(TMDbService.MovieSource source) {
+        MovieListFragment fragment = new MovieListFragment();
+        Bundle args = new Bundle();
+
+        args.putInt(ARG_MOVIE_SOURCE, source.getValue());
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     /**
      * Dagger requires an empty public constructor
@@ -95,15 +102,31 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
     public MovieListFragment() {
     }
 
+    /**
+     * Return movie soruce associated with the fragment
+     */
+    public TMDbService.MovieSource getMovieSource() {
+        Bundle args = getArguments();
+
+        if (args == null) {
+            return null;
+        }
+
+        int value = args.getInt(MovieListFragment.ARG_MOVIE_SOURCE, -1);
+
+        if (value == -1) {
+            return null;
+        }
+
+        return TMDbService.MovieSource.fromValue(value);
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Store saved instance state to be used after populating the movie list adapter
         mSavedInstanceState = savedInstanceState;
-
-        // Initialize recycler view
-        mMovieListLayoutManager = getMovieListLayoutManager();
     }
 
     @Override
@@ -133,22 +156,6 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
         mPresenter.detach();
     }
 
-    public TMDbService.MovieSource getMovieSource() {
-        Bundle args = getArguments();
-
-        if (args == null) {
-            return null;
-        }
-
-        int value = args.getInt(MovieListFragment.ARG_MOVIE_SOURCE, -1);
-
-        if (value == -1) {
-            return null;
-        }
-
-        return TMDbService.MovieSource.fromValue(value);
-    }
-
     @Override
     public void setMovieCount(int count) {
         mMovieListAdapter.setItemCount(count);
@@ -175,16 +182,6 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
         ButterKnife.apply(mViewsFetching, setVisibility(View.GONE));
         ButterKnife.apply(mViewsLoaded, setVisibility(View.VISIBLE));
 
-    }
-
-    RecyclerView.LayoutManager getMovieListLayoutManager() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        Float spanCount = (displayMetrics.widthPixels / displayMetrics.density / MAX_CARD_WIDTH);
-
-        return new GridLayoutManager(getActivity(), spanCount.intValue());
     }
 
     /**

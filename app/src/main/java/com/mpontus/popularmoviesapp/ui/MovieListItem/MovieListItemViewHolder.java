@@ -1,27 +1,30 @@
 package com.mpontus.popularmoviesapp.ui.MovieListItem;
 
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mpontus.popularmoviesapp.R;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MovieListItemViewHolder extends RecyclerView.ViewHolder implements MovieListItemContract.View {
     private MovieListItemContract.Presenter mPresenter;
 
-    @BindView(R.id.ivPoster)
-    ImageView mPosterView;
+    @BindView(R.id.title)
+    TextView mTitleView;
+    @BindView(R.id.backdrop)
+    ImageView mBackdropView;
 
     public MovieListItemViewHolder(View view) {
         super(view);
 
         ButterKnife.bind(this, itemView);
+
+        itemView.setOnClickListener(this::onClick);
     }
 
     public void attachPresenter(MovieListItemContract.Presenter presenter) {
@@ -35,13 +38,17 @@ public class MovieListItemViewHolder extends RecyclerView.ViewHolder implements 
     }
 
     @Override
-    public void setPoster(Uri posterUrl) {
-        Picasso.with(itemView.getContext())
-                .load(posterUrl)
-                .into(mPosterView);
+    public void setTitle(String title) {
+        mTitleView.setText(title);
     }
 
-    @OnClick(R.id.ivPoster)
+    @Override
+    public void setBackdrop(String backdropPath) {
+        Picasso.with(itemView.getContext())
+                .load("https://image.tmdb.org/t/p/w300" + backdropPath)
+                .into(mBackdropView);
+    }
+
     public void onClick(View view) {
         mPresenter.onClick();
     }

@@ -27,7 +27,7 @@ public class MovieListAdapter extends Adapter<MovieListItemViewHolder> {
     @Override
     public MovieListItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new MovieListItemViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.movie_item, parent, false));
+                .inflate(R.layout.movie_list_item, parent, false));
     }
 
     @Override

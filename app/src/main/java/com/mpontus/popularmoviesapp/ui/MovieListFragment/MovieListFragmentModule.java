@@ -1,7 +1,12 @@
 package com.mpontus.popularmoviesapp.ui.MovieListFragment;
 
 
+import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
 import com.mpontus.popularmoviesapp.data.AppApiHelper;
+import com.mpontus.popularmoviesapp.di.ApplicationContext;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
@@ -34,5 +39,11 @@ public abstract class MovieListFragmentModule {
     @FragmentScoped
     static Observable<List<Movie>> provideMovieList(AppApiHelper apiHelper, TMDbService.MovieSource movieSource) {
         return apiHelper.getMovies(movieSource).cache();
+    }
+
+    @Provides
+    @FragmentScoped
+    static RecyclerView.LayoutManager provideLayoutManager(@ApplicationContext Context context) {
+        return new LinearLayoutManager(context);
     }
 }

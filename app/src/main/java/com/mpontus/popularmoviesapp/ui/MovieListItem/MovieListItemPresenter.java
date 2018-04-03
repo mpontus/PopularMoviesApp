@@ -30,7 +30,8 @@ public class MovieListItemPresenter implements MovieListItemContract.Presenter {
     public void attach() {
         mCompositeDisposable.add(
                 getMovieAtPosition(mPosition).subscribe(movie -> {
-                    mView.setPoster(movie.getPosterUrl(Movie.POSTER_SIZE_W185));
+                    mView.setTitle(movie.title);
+                    mView.setBackdrop(movie.backdropPath);
                 })
         );
     }

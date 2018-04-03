@@ -1,10 +1,10 @@
 package com.mpontus.popularmoviesapp.ui.MovieListItem;
 
-import android.net.Uri;
-
 public interface MovieListItemContract {
     interface View {
-        void setPoster(Uri posterUri);
+        void setTitle(String title);
+
+        void setBackdrop(String backdropPath);
     }
 
     interface Presenter {

@@ -50,7 +50,7 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
      * Recycler view layout manager
      */
     @Inject
-    MovieListLayoutManager mMovieListLayoutManager;
+    RecyclerView.LayoutManager mMovieListLayoutManager;
 
     /**
      * Recycler view for movie listing

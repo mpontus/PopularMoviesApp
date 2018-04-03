@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.data.network;
+package com.mpontus.popularmoviesapp.data;
 
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
@@ -14,21 +14,24 @@ import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 
 @ActivityScoped
-public class AppApiHelper implements ApiHelper {
+public class AppApiHelper {
     private final TMDbService mApi;
     private final Scheduler mBackgroundThreadScheduler;
-
+    private final Scheduler mMainThreadScheduler;
 
     @Inject
-    AppApiHelper(TMDbService api, @Named("BACKGROUND") Scheduler backgroundThreadScheduler) {
+    AppApiHelper(TMDbService api,
+                 @Named("BACKGROUND") Scheduler backgroundThreadScheduler,
+                 @Named("MAIN") Scheduler mainThreadScheduler) {
         mApi = api;
         mBackgroundThreadScheduler = backgroundThreadScheduler;
+        mMainThreadScheduler = mainThreadScheduler;
     }
 
-    @Override
     public Observable<List<Movie>> getMovies(TMDbService.MovieSource source) {
         return getResponse(source).map(response -> response.results)
-                .subscribeOn(mBackgroundThreadScheduler);
+                .subscribeOn(mBackgroundThreadScheduler)
+                .observeOn(mMainThreadScheduler);
     }
 
     private Observable<MovieListResponse> getResponse(TMDbService.MovieSource source) {

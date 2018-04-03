@@ -1,7 +1,6 @@
-package com.mpontus.popularmoviesapp.ui.MovieListFragment;
+package com.mpontus.popularmoviesapp.ui.MovieList;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -16,10 +15,7 @@ import android.widget.ProgressBar;
 
 import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
-import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
-import com.mpontus.popularmoviesapp.ui.MovieDetails.MovieDetailsActivity;
-import com.mpontus.popularmoviesapp.ui.utils.MovieListAdapter;
 
 import java.util.List;
 
@@ -31,7 +27,7 @@ import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
 
 @ActivityScoped
-public class MovieListFragment extends DaggerFragment implements MovieListFragmentContract.View, MovieListAdapter.OnClickListener {
+public class MovieListFragment extends DaggerFragment implements MovieListFragmentContract.View {
     public static final String ARG_MOVIE_SOURCE = "MOVIE_SOURCE";
 
     public static MovieListFragment newInstance(TMDbService.MovieSource source) {
@@ -55,7 +51,8 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
     /**
      * Recycler view adapter
      */
-    private MovieListAdapter mMovieListAdapter;
+    @Inject
+    MovieListAdapter mMovieListAdapter;
 
     /**
      * Recycler view for movie listing
@@ -106,7 +103,6 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
         mSavedInstanceState = savedInstanceState;
 
         // Initialize recycler view
-        mMovieListAdapter = new MovieListAdapter(this);
         mMovieListLayoutManager = getMovieListLayoutManager();
     }
 
@@ -137,6 +133,27 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
         mPresenter.detach();
     }
 
+    public TMDbService.MovieSource getMovieSource() {
+        Bundle args = getArguments();
+
+        if (args == null) {
+            return null;
+        }
+
+        int value = args.getInt(MovieListFragment.ARG_MOVIE_SOURCE, -1);
+
+        if (value == -1) {
+            return null;
+        }
+
+        return TMDbService.MovieSource.fromValue(value);
+    }
+
+    @Override
+    public void setMovieCount(int count) {
+        mMovieListAdapter.setItemCount(count);
+    }
+
     @Override
     public void showOffline() {
         ButterKnife.apply(mViewsOffline, setVisibility(View.VISIBLE));
@@ -158,20 +175,6 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
         ButterKnife.apply(mViewsFetching, setVisibility(View.GONE));
         ButterKnife.apply(mViewsLoaded, setVisibility(View.VISIBLE));
 
-    }
-
-    @Override
-    public void setMovies(List<Movie> movies) {
-        mMovieListAdapter.setMovies(movies);
-    }
-
-    @Override
-    public void openDetailActivity(Movie movie) {
-        Intent intent = new Intent(getActivity(), MovieDetailsActivity.class);
-
-        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE, movie);
-
-        startActivity(intent);
     }
 
     RecyclerView.LayoutManager getMovieListLayoutManager() {
@@ -197,18 +200,9 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
     }
 
     /**
-     * Open detail activity when the movie is clicked
-     */
-    @Override
-    public void onClick(View v, Movie m) {
-        mPresenter.onMovieClick(m);
-    }
-
-    /**
      * Create ButterKnife action which sets View visibility to the given value
      */
     private ButterKnife.Action<View> setVisibility(int value) {
         return (view, index) -> view.setVisibility(value);
     }
-
 }

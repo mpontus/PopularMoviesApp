@@ -1,11 +1,8 @@
-package com.mpontus.popularmoviesapp.ui.MovieListFragment;
+package com.mpontus.popularmoviesapp.ui.MovieList;
 
-import com.mpontus.popularmoviesapp.data.connectivity.AppConnetivityHelper;
-import com.mpontus.popularmoviesapp.data.connectivity.ConnectivityHelper;
-import com.mpontus.popularmoviesapp.data.network.ApiHelper;
-import com.mpontus.popularmoviesapp.data.network.AppApiHelper;
+import com.mpontus.popularmoviesapp.data.AppApiHelper;
+import com.mpontus.popularmoviesapp.data.AppConnectivityHelper;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
-import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
 
 import javax.inject.Inject;
@@ -16,8 +13,8 @@ import io.reactivex.disposables.CompositeDisposable;
 
 @FragmentScoped
 public class MovieListFragmentPresenter implements MovieListFragmentContract.Presenter {
-    private final ApiHelper mApiHelper;
-    private final ConnectivityHelper mConnectivityHelper;
+    private final AppApiHelper mApiHelper;
+    private final AppConnectivityHelper mConnectivityHelper;
     private final Scheduler mMainThreadScheduler;
     private final CompositeDisposable mCompositeDisposable;
 
@@ -31,7 +28,7 @@ public class MovieListFragmentPresenter implements MovieListFragmentContract.Pre
     @Inject
     MovieListFragmentPresenter(MovieListFragmentContract.View view,
                                AppApiHelper repository,
-                               AppConnetivityHelper networkStateHelper,
+                               AppConnectivityHelper networkStateHelper,
                                @Named("MAIN") Scheduler mainThreadScheduler,
                                TMDbService.MovieSource movieSource) {
         mView = view;
@@ -85,13 +82,9 @@ public class MovieListFragmentPresenter implements MovieListFragmentContract.Pre
                     mRequestPending = false;
                     mLoadWhenOnline = false;
 
-                    mView.setMovies(movies);
+                    mView.setMovieCount(movies.size());
 
                     mView.showMovies();
                 });
-    }
-
-    public void onMovieClick(Movie movie) {
-        mView.openDetailActivity(movie);
     }
 }

@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.data.connectivity;
+package com.mpontus.popularmoviesapp.data;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,21 +9,22 @@ import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
+import com.mpontus.popularmoviesapp.di.ApplicationContext;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
 @ActivityScoped
-public class AppConnetivityHelper implements ConnectivityHelper {
+public class AppConnectivityHelper {
 
     private final Context mContext;
 
     private final ConnectivityManager mConnectivityManager;
 
     @Inject
-    AppConnetivityHelper(Context context,
-                         @Nullable ConnectivityManager connectivityManager) {
+    AppConnectivityHelper(@ApplicationContext Context context,
+                          @Nullable ConnectivityManager connectivityManager) {
         mContext = context;
         mConnectivityManager = connectivityManager;
     }

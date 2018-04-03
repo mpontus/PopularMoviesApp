@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.data.preferences;
+package com.mpontus.popularmoviesapp.data;
 
 import android.content.SharedPreferences;
 
@@ -11,7 +11,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 
 @Singleton
-public class AppPreferencesHelper implements PreferencesHelper {
+public class AppPreferencesHelper {
 
     private static final String PREF_KEY_MOVIE_SOURCE = "PREF_KEY_MOVIE_SOURCE";
 
@@ -38,7 +38,6 @@ public class AppPreferencesHelper implements PreferencesHelper {
                 .map(TMDbService.MovieSource::fromValue);
     }
 
-    @Override
     public void setMovieSource(TMDbService.MovieSource source) {
         mPreferences.edit().putInt(PREF_KEY_MOVIE_SOURCE, source.getValue()).apply();
     }

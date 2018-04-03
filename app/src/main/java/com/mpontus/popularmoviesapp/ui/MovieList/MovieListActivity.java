@@ -7,14 +7,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import com.mpontus.popularmoviesapp.R;
+import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.tmdb.TMDbService;
-import com.mpontus.popularmoviesapp.ui.MovieListFragment.MovieListFragment;
 import com.mpontus.popularmoviesapp.ui.utils.ArrayPagerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
 
+@ActivityScoped
 public class MovieListActivity extends DaggerAppCompatActivity {
 
     @BindView(R.id.pager)

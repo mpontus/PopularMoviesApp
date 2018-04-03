@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.ui.MovieList;
+package com.mpontus.popularmoviesapp.ui.MovieListItem;
 
 import android.net.Uri;
 

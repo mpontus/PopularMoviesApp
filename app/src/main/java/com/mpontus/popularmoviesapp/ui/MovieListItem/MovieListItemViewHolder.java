@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.ui.MovieList;
+package com.mpontus.popularmoviesapp.ui.MovieListItem;
 
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -18,13 +18,13 @@ public class MovieListItemViewHolder extends RecyclerView.ViewHolder implements 
     @BindView(R.id.ivPoster)
     ImageView mPosterView;
 
-    MovieListItemViewHolder(View view) {
+    public MovieListItemViewHolder(View view) {
         super(view);
 
         ButterKnife.bind(this, itemView);
     }
 
-    void attachPresenter(MovieListItemContract.Presenter presenter) {
+    public void attachPresenter(MovieListItemContract.Presenter presenter) {
         if (mPresenter != null) {
             mPresenter.detach();
         }
@@ -34,6 +34,7 @@ public class MovieListItemViewHolder extends RecyclerView.ViewHolder implements 
         mPresenter.attach();
     }
 
+    @Override
     public void setPoster(Uri posterUrl) {
         Picasso.with(itemView.getContext())
                 .load(posterUrl)

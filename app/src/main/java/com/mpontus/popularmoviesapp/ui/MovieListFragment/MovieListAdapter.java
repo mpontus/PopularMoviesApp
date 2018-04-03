@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.ui.MovieList;
+package com.mpontus.popularmoviesapp.ui.MovieListFragment;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
+import com.mpontus.popularmoviesapp.ui.MovieListItem.MovieListItemPresenterFactory;
+import com.mpontus.popularmoviesapp.ui.MovieListItem.MovieListItemViewHolder;
 
 import javax.inject.Inject;
 

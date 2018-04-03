@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.ui.MovieList;
+package com.mpontus.popularmoviesapp.ui.MovieListItem;
 
 import com.mpontus.popularmoviesapp.data.Navigator;
 import com.mpontus.popularmoviesapp.tmdb.Movie;

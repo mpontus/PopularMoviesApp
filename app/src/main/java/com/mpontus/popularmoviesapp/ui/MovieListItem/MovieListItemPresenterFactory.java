@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.ui.MovieList;
+package com.mpontus.popularmoviesapp.ui.MovieListItem;
 
 import com.mpontus.popularmoviesapp.data.Navigator;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
@@ -19,15 +19,15 @@ public class MovieListItemPresenterFactory {
     private Observable<List<Movie>> mMovieList;
 
     @Inject
-    MovieListItemPresenterFactory(Navigator navigator,
-                                  CompositeDisposable compositeDisposable,
-                                  Observable<List<Movie>> movieList) {
+    public MovieListItemPresenterFactory(Navigator navigator,
+                                         CompositeDisposable compositeDisposable,
+                                         Observable<List<Movie>> movieList) {
         mNavigator = navigator;
         mCompositeDisposable = compositeDisposable;
         mMovieList = movieList;
     }
 
-    MovieListItemContract.Presenter createPresenter(MovieListItemContract.View view, int position) {
+    public MovieListItemContract.Presenter createPresenter(MovieListItemContract.View view, int position) {
         return new MovieListItemPresenter(mNavigator, mCompositeDisposable, mMovieList, view, position);
     }
 }

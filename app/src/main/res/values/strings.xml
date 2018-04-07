@@ -15,6 +15,8 @@
 
     <string name="sort_order_popular">Popular Movies</string>
     <string name="sort_order_top_rated">Top Rated Movies</string>
+    <string name="movie_source_popular">Popular</string>
+    <string name="movie_source_top_rated">Top Rated</string>
 
     <plurals name="numberOfVotes">
         <item quantity="one">%d vote</item>

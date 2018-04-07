@@ -31,12 +31,11 @@ public class MovieListActivity extends DaggerAppCompatActivity {
         setContentView(R.layout.activity_movie_list);
         ButterKnife.bind(this);
 
-        // TODO: Investigate injecting Fragments using multifactories
-        // see https://frogermcs.github.io/inject-everything-viewholder-and-dagger-2-example/#multibinding
         mPager.setAdapter(new ArrayPagerAdapter(getSupportFragmentManager(),
-                new Fragment[]{MovieListFragment.newInstance(MovieSourceType.TOP_RATED),
-                        MovieListFragment.newInstance(MovieSourceType.POPULAR)},
-                new String[]{"Top Rated", "Popular"}));
+                new Fragment[]{MovieListFragment.newInstance(MovieSourceType.POPULAR),
+                        MovieListFragment.newInstance(MovieSourceType.TOP_RATED)},
+                new String[]{getString(R.string.movie_source_popular),
+                        getString(R.string.movie_source_top_rated)}));
 
         mTabs.setupWithViewPager(mPager);
     }

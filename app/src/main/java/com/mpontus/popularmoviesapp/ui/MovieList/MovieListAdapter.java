@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.ui.MovieListFragment;
+package com.mpontus.popularmoviesapp.ui.MovieList;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -7,12 +7,11 @@ import android.view.ViewGroup;
 
 import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
-import com.mpontus.popularmoviesapp.ui.MovieListItem.MovieListItemViewHolder;
 
 import javax.inject.Inject;
 
 @FragmentScoped
-public class MovieListAdapter extends Adapter<MovieListItemViewHolder> {
+public class MovieListAdapter extends Adapter<MovieListViewHolder> {
     private final MovieListPresenter mPresenter;
 
     private int mItemCount = 0;
@@ -24,13 +23,13 @@ public class MovieListAdapter extends Adapter<MovieListItemViewHolder> {
 
     @NonNull
     @Override
-    public MovieListItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MovieListItemViewHolder(LayoutInflater.from(parent.getContext())
+    public MovieListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new MovieListViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.movie_list_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieListItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MovieListViewHolder holder, int position) {
         holder.attachPresenter(mPresenter.createItemPresenter(holder, position));
     }
 

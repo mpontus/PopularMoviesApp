@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.ui.MovieListFragment;
+package com.mpontus.popularmoviesapp.ui.MovieList;
 
 
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.mpontus.popularmoviesapp.R;
-import com.mpontus.popularmoviesapp.di.ActivityScoped;
+import com.mpontus.popularmoviesapp.di.FragmentScoped;
 import com.mpontus.popularmoviesapp.domain.MovieSourceType;
 
 import java.util.List;
@@ -24,12 +24,12 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerFragment;
 
-@ActivityScoped
-public class MovieListFragment extends DaggerFragment implements MovieListFragmentContract.View {
+@FragmentScoped
+public class MovieListFragment extends DaggerFragment {
     public static final String ARG_MOVIE_SOURCE = "MOVIE_SOURCE";
 
     @Inject
-    MovieListFragmentContract.Presenter mPresenter;
+    MovieListPresenter mPresenter;
 
     /**
      * Key for the saved state bundle for saving recycler view position
@@ -144,19 +144,16 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
         mPresenter.detach();
     }
 
-    @Override
     public void setMovieCount(int count) {
         mMovieListAdapter.setItemCount(count);
     }
 
-    @Override
     public void showOffline() {
         ButterKnife.apply(mViewsOffline, setVisibility(View.VISIBLE));
         ButterKnife.apply(mViewsFetching, setVisibility(View.GONE));
         ButterKnife.apply(mViewsLoaded, setVisibility(View.GONE));
     }
 
-    @Override
     public void showLoading() {
         ButterKnife.apply(mViewsOffline, setVisibility(View.GONE));
         ButterKnife.apply(mViewsFetching, setVisibility(View.VISIBLE));
@@ -164,7 +161,6 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
 
     }
 
-    @Override
     public void showMovies() {
         ButterKnife.apply(mViewsOffline, setVisibility(View.GONE));
         ButterKnife.apply(mViewsFetching, setVisibility(View.GONE));

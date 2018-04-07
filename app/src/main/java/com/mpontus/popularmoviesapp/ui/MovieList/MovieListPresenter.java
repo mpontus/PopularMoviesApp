@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.ui.MovieListFragment;
+package com.mpontus.popularmoviesapp.ui.MovieList;
 
 import android.util.Log;
 
@@ -8,7 +8,6 @@ import com.mpontus.popularmoviesapp.data.Navigator;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
 import com.mpontus.popularmoviesapp.domain.MovieSourceType;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
-import com.mpontus.popularmoviesapp.ui.MovieListItem.MovieListItemViewHolder;
 
 import java.util.List;
 
@@ -20,10 +19,10 @@ import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 
 @FragmentScoped
-public class MovieListPresenter implements MovieListFragmentContract.Presenter {
+public class MovieListPresenter {
     private static final String TAG = "MovieListPresenter";
 
-    private final MovieListFragmentContract.View mView;
+    private final MovieListFragment mView;
     private final AppConnectivityHelper mConnectivityHelper;
     private final Navigator mNavigator;
     private final MovieRepository mRepository;
@@ -105,15 +104,15 @@ public class MovieListPresenter implements MovieListFragmentContract.Presenter {
         mCompositeDisposable.dispose();
     }
 
-    public ItemPresenter createItemPresenter(MovieListItemViewHolder view, int position) {
+    public ItemPresenter createItemPresenter(MovieListViewHolder view, int position) {
         return new ItemPresenter(view, position);
     }
 
     public class ItemPresenter {
-        private final MovieListItemViewHolder mView;
+        private final MovieListViewHolder mView;
         private final Movie mMovie;
 
-        ItemPresenter(MovieListItemViewHolder view, int position) {
+        ItemPresenter(MovieListViewHolder view, int position) {
             mView = view;
             mMovie = mMovieList.get(position);
         }

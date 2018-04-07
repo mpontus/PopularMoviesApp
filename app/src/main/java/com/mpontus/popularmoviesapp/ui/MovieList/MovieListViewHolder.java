@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.ui.MovieListItem;
+package com.mpontus.popularmoviesapp.ui.MovieList;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -6,13 +6,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mpontus.popularmoviesapp.R;
-import com.mpontus.popularmoviesapp.ui.MovieListFragment.MovieListPresenter;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MovieListItemViewHolder extends RecyclerView.ViewHolder {
+public class MovieListViewHolder extends RecyclerView.ViewHolder {
     private MovieListPresenter.ItemPresenter mPresenter;
 
     @BindView(R.id.title)
@@ -20,7 +19,7 @@ public class MovieListItemViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.backdrop)
     ImageView mBackdropView;
 
-    public MovieListItemViewHolder(View view) {
+    public MovieListViewHolder(View view) {
         super(view);
 
         ButterKnife.bind(this, itemView);

@@ -6,8 +6,6 @@ import android.content.Context;
 import com.mpontus.popularmoviesapp.di.ActivityContext;
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
-import com.mpontus.popularmoviesapp.ui.MovieListFragment.MovieListFragment;
-import com.mpontus.popularmoviesapp.ui.MovieListFragment.MovieListFragmentModule;
 
 import dagger.Binds;
 import dagger.Module;

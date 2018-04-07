@@ -1,4 +1,4 @@
-package com.mpontus.popularmoviesapp.ui.MovieListFragment;
+package com.mpontus.popularmoviesapp.ui.MovieList;
 
 
 import android.content.Context;
@@ -9,20 +9,11 @@ import com.mpontus.popularmoviesapp.di.ApplicationContext;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
 import com.mpontus.popularmoviesapp.domain.MovieSourceType;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public abstract class MovieListFragmentModule {
-    @Binds
-    @FragmentScoped
-    abstract MovieListFragmentContract.Presenter provideMovieListPresenter(MovieListPresenter presenter);
-
-    @Binds
-    @FragmentScoped
-    abstract MovieListFragmentContract.View provideMovieListView(MovieListFragment fragment);
-
     @Provides
     @FragmentScoped
     static MovieSourceType provideMovieSource(MovieListFragment fragment) {

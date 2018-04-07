@@ -58,15 +58,8 @@ public class MovieListPresenter {
                         return Observable.empty();
                     }
 
-                    Observable<List<Movie>> resultsObservable;
-
-                    if (mMovieSourceType == MovieSourceType.POPULAR) {
-                        resultsObservable = mRepository.getPopularMovies();
-                    } else {
-                        resultsObservable = mRepository.getTopRatedMovies();
-                    }
-
-                    return resultsObservable.subscribeOn(mBackgroundThreadScheduler);
+                    return getMovieListObservable()
+                            .subscribeOn(mBackgroundThreadScheduler);
                 })
                 .share();
 
@@ -106,6 +99,22 @@ public class MovieListPresenter {
 
     public ItemPresenter createItemPresenter(MovieListViewHolder view, int position) {
         return new ItemPresenter(view, position);
+    }
+
+    private Observable<List<Movie>> getMovieListObservable() {
+        switch (mMovieSourceType) {
+            case POPULAR:
+                return mRepository.getPopularMovies();
+
+            case TOP_RATED:
+                return mRepository.getTopRatedMovies();
+
+            case FAVORITE:
+                return mRepository.getFavoriteMovies();
+
+            default:
+                return Observable.empty();
+        }
     }
 
     public class ItemPresenter {

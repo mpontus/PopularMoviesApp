@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mpontus.popularmoviesapp.BuildConfig;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.HttpUrl;
@@ -17,8 +19,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class TMDbServiceModule {
     @Provides
-    TMDbService provideTMDbService() {
-        OkHttpClient client = new OkHttpClient.Builder()
+    @Singleton
+    Gson provideGson() {
+        return new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setDateFormat("yyyy-MM-dd")
+                .create();
+    }
+
+    @Provides
+    @Singleton
+    OkHttpClient provideOkHttpClient() {
+        return new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request originalRequest = chain.request();
                     HttpUrl originalUrl = originalRequest.url();
@@ -34,12 +46,10 @@ public class TMDbServiceModule {
                     return chain.proceed(resultRequest);
                 })
                 .build();
+    }
 
-        Gson gson = new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .setDateFormat("yyyy-MM-dd")
-                .create();
-
+    @Provides
+    TMDbService provideTMDbService(Gson gson, OkHttpClient client) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.themoviedb.org/3/")
                 .client(client)

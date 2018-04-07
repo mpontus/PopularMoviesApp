@@ -1,7 +1,7 @@
 package com.mpontus.popularmoviesapp.domain;
 
 public enum MovieSourceType {
-    POPULAR(1), TOP_RATED(2);
+    POPULAR(1), TOP_RATED(2), FAVORITE(3);
 
     private int value;
 
@@ -19,8 +19,10 @@ public enum MovieSourceType {
                 return POPULAR;
             case 2:
                 return TOP_RATED;
+            case 3:
+                return FAVORITE;
             default:
-                return POPULAR;
+                return null;
         }
     }
 }

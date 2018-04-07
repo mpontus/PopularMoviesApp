@@ -33,9 +33,11 @@ public class MovieListActivity extends DaggerAppCompatActivity {
 
         mPager.setAdapter(new ArrayPagerAdapter(getSupportFragmentManager(),
                 new Fragment[]{MovieListFragment.newInstance(MovieSourceType.POPULAR),
-                        MovieListFragment.newInstance(MovieSourceType.TOP_RATED)},
+                        MovieListFragment.newInstance(MovieSourceType.TOP_RATED),
+                        MovieListFragment.newInstance(MovieSourceType.FAVORITE)},
                 new String[]{getString(R.string.movie_source_popular),
-                        getString(R.string.movie_source_top_rated)}));
+                        getString(R.string.movie_source_top_rated),
+                        getString(R.string.movie_source_favorite)}));
 
         mTabs.setupWithViewPager(mPager);
     }

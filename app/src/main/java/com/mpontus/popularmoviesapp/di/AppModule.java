@@ -1,6 +1,7 @@
 package com.mpontus.popularmoviesapp.di;
 
 import android.app.Application;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.view.WindowManager;
@@ -35,5 +36,10 @@ public class AppModule {
     @Provides
     CompositeDisposable provideCompositeDisposable() {
         return new CompositeDisposable();
+    }
+
+    @Provides
+    ContentResolver provideContentResolver(@ApplicationContext Context context) {
+        return context.getContentResolver();
     }
 }

@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 
 import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
-import com.mpontus.popularmoviesapp.tmdb.TMDbService;
+import com.mpontus.popularmoviesapp.domain.MovieSourceType;
 import com.mpontus.popularmoviesapp.ui.MovieListFragment.MovieListFragment;
 import com.mpontus.popularmoviesapp.ui.utils.ArrayPagerAdapter;
 
@@ -35,8 +35,8 @@ public class MovieListActivity extends DaggerAppCompatActivity {
         // TODO: Investigate injecting Fragments using multifactories
         // see https://frogermcs.github.io/inject-everything-viewholder-and-dagger-2-example/#multibinding
         mPager.setAdapter(new ArrayPagerAdapter(getSupportFragmentManager(),
-                new Fragment[]{MovieListFragment.newInstance(TMDbService.MovieSource.TOP_RATED),
-                        MovieListFragment.newInstance(TMDbService.MovieSource.POPULAR)},
+                new Fragment[]{MovieListFragment.newInstance(MovieSourceType.TOP_RATED),
+                        MovieListFragment.newInstance(MovieSourceType.POPULAR)},
                 new String[]{"Top Rated", "Popular"}));
 
         mTabs.setupWithViewPager(mPager);

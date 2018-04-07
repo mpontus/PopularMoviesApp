@@ -13,7 +13,7 @@ import android.widget.ProgressBar;
 
 import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
-import com.mpontus.popularmoviesapp.tmdb.TMDbService;
+import com.mpontus.popularmoviesapp.domain.MovieSourceType;
 
 import java.util.List;
 
@@ -30,11 +30,6 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
 
     @Inject
     MovieListFragmentContract.Presenter mPresenter;
-
-    /**
-     * Number of columns in the grid
-     */
-    public static final int MAX_CARD_WIDTH = 144;
 
     /**
      * Key for the saved state bundle for saving recycler view position
@@ -77,15 +72,11 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
      */
     @BindViews({R.id.rvMovies})
     List<View> mViewsLoaded;
-    /**
-     * Saved recycler view position
-     */
-    private Bundle mSavedInstanceState;
 
     /**
      * Create new fragment instance for the given movie source
      */
-    public static MovieListFragment newInstance(TMDbService.MovieSource source) {
+    public static MovieListFragment newInstance(MovieSourceType source) {
         MovieListFragment fragment = new MovieListFragment();
         Bundle args = new Bundle();
 
@@ -103,9 +94,9 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
     }
 
     /**
-     * Return movie soruce associated with the fragment
+     * Return movie source associated with the fragment
      */
-    public TMDbService.MovieSource getMovieSource() {
+    public MovieSourceType getMovieSource() {
         Bundle args = getArguments();
 
         if (args == null) {
@@ -118,15 +109,12 @@ public class MovieListFragment extends DaggerFragment implements MovieListFragme
             return null;
         }
 
-        return TMDbService.MovieSource.fromValue(value);
+        return MovieSourceType.fromValue(value);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Store saved instance state to be used after populating the movie list adapter
-        mSavedInstanceState = savedInstanceState;
     }
 
     @Override

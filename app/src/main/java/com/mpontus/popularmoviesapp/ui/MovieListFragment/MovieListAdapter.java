@@ -7,20 +7,19 @@ import android.view.ViewGroup;
 
 import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
-import com.mpontus.popularmoviesapp.ui.MovieListItem.MovieListItemPresenterFactory;
 import com.mpontus.popularmoviesapp.ui.MovieListItem.MovieListItemViewHolder;
 
 import javax.inject.Inject;
 
 @FragmentScoped
 public class MovieListAdapter extends Adapter<MovieListItemViewHolder> {
+    private final MovieListPresenter mPresenter;
+
     private int mItemCount = 0;
 
-    private MovieListItemPresenterFactory mPresenterFactory;
-
     @Inject
-    MovieListAdapter(MovieListItemPresenterFactory presenterFactory) {
-        mPresenterFactory = presenterFactory;
+    MovieListAdapter(MovieListPresenter presenter) {
+        mPresenter = presenter;
     }
 
     @NonNull
@@ -32,7 +31,7 @@ public class MovieListAdapter extends Adapter<MovieListItemViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MovieListItemViewHolder holder, int position) {
-        holder.attachPresenter(mPresenterFactory.createPresenter(holder, position));
+        holder.attachPresenter(mPresenter.createItemPresenter(holder, position));
     }
 
     @Override

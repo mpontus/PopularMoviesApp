@@ -6,13 +6,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mpontus.popularmoviesapp.R;
+import com.mpontus.popularmoviesapp.ui.MovieListFragment.MovieListPresenter;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MovieListItemViewHolder extends RecyclerView.ViewHolder implements MovieListItemContract.View {
-    private MovieListItemContract.Presenter mPresenter;
+public class MovieListItemViewHolder extends RecyclerView.ViewHolder {
+    private MovieListPresenter.ItemPresenter mPresenter;
 
     @BindView(R.id.title)
     TextView mTitleView;
@@ -27,7 +28,7 @@ public class MovieListItemViewHolder extends RecyclerView.ViewHolder implements 
         itemView.setOnClickListener(this::onClick);
     }
 
-    public void attachPresenter(MovieListItemContract.Presenter presenter) {
+    public void attachPresenter(MovieListPresenter.ItemPresenter presenter) {
         if (mPresenter != null) {
             mPresenter.detach();
         }
@@ -37,12 +38,10 @@ public class MovieListItemViewHolder extends RecyclerView.ViewHolder implements 
         mPresenter.attach();
     }
 
-    @Override
     public void setTitle(String title) {
         mTitleView.setText(title);
     }
 
-    @Override
     public void setBackdrop(String backdropPath) {
         Picasso.with(itemView.getContext())
                 .load("https://image.tmdb.org/t/p/w300" + backdropPath)
@@ -50,6 +49,8 @@ public class MovieListItemViewHolder extends RecyclerView.ViewHolder implements 
     }
 
     public void onClick(View view) {
-        mPresenter.onClick();
+        if (mPresenter != null) {
+            mPresenter.onClick();
+        }
     }
 }

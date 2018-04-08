@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 @Singleton
@@ -33,5 +34,17 @@ public class MovieRepository {
 
     public Observable<List<Movie>> getFavoriteMovies() {
         return mLocalRepository.getFavoriteMovies();
+    }
+
+    public Observable<Boolean> isMovieFavorite(Movie movie) {
+        return mLocalRepository.isMovieFavorite(movie);
+    }
+
+    public Completable setMovieFavorite(Movie movie, boolean isFavorite) {
+        if (isFavorite) {
+            return mLocalRepository.favoriteMovie(movie);
+        } else {
+            return mLocalRepository.unfavoriteMovie(movie);
+        }
     }
 }

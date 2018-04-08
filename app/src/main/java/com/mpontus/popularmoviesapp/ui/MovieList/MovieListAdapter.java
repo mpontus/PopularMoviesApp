@@ -6,11 +6,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.mpontus.popularmoviesapp.R;
-import com.mpontus.popularmoviesapp.di.FragmentScoped;
 
 import javax.inject.Inject;
 
-@FragmentScoped
 public class MovieListAdapter extends Adapter<MovieListViewHolder> {
     private final MovieListPresenter mPresenter;
 

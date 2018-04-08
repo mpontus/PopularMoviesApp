@@ -19,5 +19,7 @@ interface MovieDetailsContract {
         void attach();
 
         void detach();
+
+        void onFavoriteClick();
     }
 }

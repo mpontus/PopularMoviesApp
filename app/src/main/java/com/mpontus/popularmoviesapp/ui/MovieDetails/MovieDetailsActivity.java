@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,15 +16,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.AndroidInjection;
 import io.reactivex.annotations.Nullable;
 
-public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsContract.View {
+public class MovieDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_MOVIE = "EXTRA_MOVIE";
 
     @Inject
-    MovieDetailsContract.Presenter mPresenter;
+    MovieDetailsPresenter mPresenter;
 
     @Nullable
     @BindView(R.id.ivBackdrop)
@@ -35,6 +38,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     TextView mRatingView;
     @BindView(R.id.tvDescription)
     TextView mDescriptionView;
+    @BindView(R.id.btnFavorite)
+    Button mFavoriteButton;
+    @BindView(R.id.btnUnfavorite)
+    Button mUnfavoriteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,28 +60,24 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
         mPresenter.attach();
     }
 
-    @Override
     public void setTitle(String title, int year) {
         String formattedTitle = getString(R.string.movie_title_format, title, year);
 
         mTitleView.setText(formattedTitle);
     }
 
-    @Override
     public void setBackdrop(Uri backdropUrl) {
         Picasso.with(this)
                 .load(backdropUrl)
                 .into(mBackdropView);
     }
 
-    @Override
     public void setPoster(Uri posterUrl) {
         Picasso.with(this)
                 .load(posterUrl)
                 .into(mPosterView);
     }
 
-    @Override
     public void setRating(float voteAverage, int voteCount) {
         String formattedRating = getString(R.string.movie_rating_format,
                 voteAverage,
@@ -83,8 +86,33 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
         mRatingView.setText(formattedRating);
     }
 
-    @Override
+    public void showFavoriteButton() {
+        mFavoriteButton.setVisibility(View.VISIBLE);
+    }
+
+    public void hideFavoriteButton() {
+        mFavoriteButton.setVisibility(View.INVISIBLE);
+    }
+
+    public void showUnfavoriteButton() {
+        mUnfavoriteButton.setVisibility(View.VISIBLE);
+    }
+
+    public void hideUnfavoriteButton() {
+        mUnfavoriteButton.setVisibility(View.INVISIBLE);
+    }
+
     public void setDescription(String description) {
         mDescriptionView.setText(description);
+    }
+
+    @OnClick(R.id.btnFavorite)
+    public void onFavoriteClick(View view) {
+        mPresenter.onFavoriteClick();
+    }
+
+    @OnClick(R.id.btnUnfavorite)
+    public void onUnfavoriteClick(View view) {
+        mPresenter.onUnfavoriteClick();
     }
 }

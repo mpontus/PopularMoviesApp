@@ -2,7 +2,6 @@ package com.mpontus.popularmoviesapp.ui.MovieList;
 
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -31,10 +30,6 @@ public class MovieListFragment extends DaggerFragment {
     @Inject
     MovieListPresenter mPresenter;
 
-    /**
-     * Key for the saved state bundle for saving recycler view position
-     */
-    public static final String SAVED_STATE_MOVIE_LIST_LAYOUT_MANAGER = "MOVIE_LIST_LAYOUT_MANAGER";
     /**
      * Recycler view adapter
      */
@@ -166,18 +161,6 @@ public class MovieListFragment extends DaggerFragment {
         ButterKnife.apply(mViewsFetching, setVisibility(View.GONE));
         ButterKnife.apply(mViewsLoaded, setVisibility(View.VISIBLE));
 
-    }
-
-    /**
-     * Save the position of the recycler view
-     */
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        Parcelable movieListLayoutManagerState = mMovieListLayoutManager.onSaveInstanceState();
-
-        outState.putParcelable(SAVED_STATE_MOVIE_LIST_LAYOUT_MANAGER, movieListLayoutManagerState);
-
-        super.onSaveInstanceState(outState);
     }
 
     /**

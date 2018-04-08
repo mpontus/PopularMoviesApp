@@ -1,5 +1,7 @@
 package com.mpontus.popularmoviesapp.ui.MovieDetails;
 
+import android.util.Log;
+
 import com.mpontus.popularmoviesapp.data.MovieRepository;
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
@@ -47,6 +49,20 @@ public class MovieDetailsPresenter {
                     } else {
                         mView.showFavoriteButton();
                     }
+                });
+
+        mRepository.getMovieReviews(mMovie)
+                .subscribeOn(mBackgroundThreadScheduler)
+                .observeOn(mMainThreadScheduler)
+                .subscribe(reviews -> {
+                    Log.v("Reviews", "" + reviews.size());
+                });
+
+        mRepository.getMovieVideos(mMovie)
+                .subscribeOn(mBackgroundThreadScheduler)
+                .observeOn(mMainThreadScheduler)
+                .subscribe(videos -> {
+                    Log.v("Reviews", "" + videos.size());
                 });
     }
 

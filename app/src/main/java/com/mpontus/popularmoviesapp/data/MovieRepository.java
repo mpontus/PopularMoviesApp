@@ -3,6 +3,8 @@ package com.mpontus.popularmoviesapp.data;
 import com.mpontus.popularmoviesapp.data.local.LocalMovieRepository;
 import com.mpontus.popularmoviesapp.data.remote.RemoteMovieRepository;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
+import com.mpontus.popularmoviesapp.tmdb.Review;
+import com.mpontus.popularmoviesapp.tmdb.Video;
 
 import java.util.List;
 
@@ -46,5 +48,13 @@ public class MovieRepository {
         } else {
             return mLocalRepository.unfavoriteMovie(movie);
         }
+    }
+
+    public Observable<List<Review>> getMovieReviews(Movie movie) {
+        return mRemoteRepository.getMovieReviews(movie);
+    }
+
+    public Observable<List<Video>> getMovieVideos(Movie movie) {
+        return mRemoteRepository.getMovieVideos(movie);
     }
 }

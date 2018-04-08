@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <!--<item name="android:statusBarColor"></item>-->
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:colorBackground">@color/ebonyClayDark</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -20,8 +21,17 @@
     </style>
 
     <style name="MovieTitle">
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="MovieSynopsis">
+        <item name="android:textColor">#E0FFFFFF</item>
+    </style>
+
+    <style name="Heading">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
 </resources>

@@ -3,4 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="ebonyClayDark">#202139</color>
+    <color name="ebonyClay">#282942</color>
+    <color name="ebonyClayLight">#343550</color>
+    <color name="ebonyClayLight2">#444663</color>
+
+    <color name="goldenGrassLight">#FFCF2F</color>
+    <color name="goldenGrass">#DAA301</color>
+    <color name="goldenGrassDark">#BA8700</color>
+    <color name="goldenGrassDark2">#9A6E00</color>
 </resources>

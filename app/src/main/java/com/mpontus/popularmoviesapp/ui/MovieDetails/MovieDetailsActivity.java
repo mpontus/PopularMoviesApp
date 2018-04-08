@@ -30,12 +30,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @Nullable
     @BindView(R.id.ivBackdrop)
     ImageView mBackdropView;
-    @BindView(R.id.ivPoster)
-    ImageView mPosterView;
     @BindView(R.id.tvTitle)
     TextView mTitleView;
-    @BindView(R.id.tvRating)
-    TextView mRatingView;
     @BindView(R.id.tvDescription)
     TextView mDescriptionView;
     @BindView(R.id.btnFavorite)
@@ -60,30 +56,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mPresenter.attach();
     }
 
-    public void setTitle(String title, int year) {
-        String formattedTitle = getString(R.string.movie_title_format, title, year);
+    public void setTitle(String title) {
+        mTitleView.setText(title);
+    }
 
-        mTitleView.setText(formattedTitle);
+    public void setDescription(String description) {
+        mDescriptionView.setText(description);
     }
 
     public void setBackdrop(Uri backdropUrl) {
         Picasso.with(this)
                 .load(backdropUrl)
                 .into(mBackdropView);
-    }
-
-    public void setPoster(Uri posterUrl) {
-        Picasso.with(this)
-                .load(posterUrl)
-                .into(mPosterView);
-    }
-
-    public void setRating(float voteAverage, int voteCount) {
-        String formattedRating = getString(R.string.movie_rating_format,
-                voteAverage,
-                getResources().getQuantityString(R.plurals.numberOfVotes, voteCount, voteCount));
-
-        mRatingView.setText(formattedRating);
     }
 
     public void showFavoriteButton() {
@@ -100,10 +84,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     public void hideUnfavoriteButton() {
         mUnfavoriteButton.setVisibility(View.INVISIBLE);
-    }
-
-    public void setDescription(String description) {
-        mDescriptionView.setText(description);
     }
 
     @OnClick(R.id.btnFavorite)

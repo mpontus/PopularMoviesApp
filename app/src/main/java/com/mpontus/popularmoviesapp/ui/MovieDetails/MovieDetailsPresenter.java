@@ -34,10 +34,8 @@ public class MovieDetailsPresenter {
     }
 
     public void attach() {
-        mView.setTitle(mMovie.title, mMovie.getReleaseYear());
+        mView.setTitle(mMovie.title);
         mView.setBackdrop(mMovie.getBackdropUrl());
-        mView.setPoster(mMovie.getPosterUrl());
-        mView.setRating(mMovie.voteAverage, mMovie.voteCount);
         mView.setDescription(mMovie.overview);
 
         mRepository.isMovieFavorite(mMovie)

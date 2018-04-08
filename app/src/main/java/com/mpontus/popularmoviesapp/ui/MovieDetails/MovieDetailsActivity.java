@@ -1,7 +1,6 @@
 package com.mpontus.popularmoviesapp.ui.MovieDetails;
 
 import android.app.ActionBar;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -64,9 +63,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mDescriptionView.setText(description);
     }
 
-    public void setBackdrop(Uri backdropUrl) {
+    public void setBackdrop(String backdropPath) {
         Picasso.with(this)
-                .load(backdropUrl)
+                .load("https://image.tmdb.org/t/p/w300" + backdropPath)
                 .into(mBackdropView);
     }
 

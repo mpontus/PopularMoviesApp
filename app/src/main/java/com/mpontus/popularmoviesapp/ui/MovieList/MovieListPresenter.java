@@ -1,6 +1,7 @@
 package com.mpontus.popularmoviesapp.ui.MovieList;
 
 import android.util.Log;
+import android.view.View;
 
 import com.mpontus.popularmoviesapp.data.AppConnectivityHelper;
 import com.mpontus.popularmoviesapp.data.MovieRepository;
@@ -134,8 +135,8 @@ public class MovieListPresenter {
         public void detach() {
         }
 
-        public void onClick() {
-            mNavigator.openMovieDetails(mMovie);
+        public void onClick(View backdropView) {
+            mNavigator.openMovieDetails(mMovie, backdropView);
         }
     }
 }

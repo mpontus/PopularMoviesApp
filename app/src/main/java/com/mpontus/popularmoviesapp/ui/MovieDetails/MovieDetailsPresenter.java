@@ -35,7 +35,7 @@ public class MovieDetailsPresenter {
 
     public void attach() {
         mView.setTitle(mMovie.title);
-        mView.setBackdrop(mMovie.getBackdropUrl());
+        mView.setBackdrop(mMovie.backdropPath);
         mView.setDescription(mMovie.overview);
 
         mRepository.isMovieFavorite(mMovie)

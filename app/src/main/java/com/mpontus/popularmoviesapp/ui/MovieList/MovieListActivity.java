@@ -1,15 +1,21 @@
 package com.mpontus.popularmoviesapp.ui.MovieList;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.mpontus.popularmoviesapp.R;
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.domain.MovieSourceType;
+import com.mpontus.popularmoviesapp.tmdb.Movie;
+import com.mpontus.popularmoviesapp.ui.MovieDetails.MovieDetailsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,5 +67,17 @@ public class MovieListActivity extends DaggerAppCompatActivity {
         });
 
         mTabs.setupWithViewPager(mPager);
+    }
+
+    public void navigateToDetailActivity(Movie movie, View mBackdropView) {
+        Context context = this;
+        Intent intent = new Intent(context, MovieDetailsActivity.class);
+
+        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE, movie);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, mBackdropView, "backdrop");
+
+        context.startActivity(intent, options.toBundle());
     }
 }

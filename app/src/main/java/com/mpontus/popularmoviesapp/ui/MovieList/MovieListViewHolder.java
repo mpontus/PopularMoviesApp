@@ -49,7 +49,7 @@ public class MovieListViewHolder extends RecyclerView.ViewHolder {
 
     public void onClick(View view) {
         if (mPresenter != null) {
-            mPresenter.onClick();
+            mPresenter.onClick(view);
         }
     }
 }

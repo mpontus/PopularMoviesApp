@@ -1,6 +1,7 @@
 package com.mpontus.popularmoviesapp.ui.MovieList;
 
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.mpontus.popularmoviesapp.di.ActivityContext;
@@ -17,6 +18,10 @@ public abstract class MovieListModule {
     @ActivityScoped
     @ActivityContext
     abstract Context provideActivityContext(MovieListActivity activity);
+
+    @Binds
+    @ActivityScoped
+    abstract Activity provideActivity(MovieListActivity activity);
 
     @FragmentScoped
     @ContributesAndroidInjector(modules = MovieListFragmentModule.class)

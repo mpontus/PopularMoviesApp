@@ -19,6 +19,10 @@ public class MovieRepository {
     private final RemoteMovieRepository mRemoteRepository;
     private final LocalMovieRepository mLocalRepository;
 
+    private Observable<List<Movie>> mPopularMoviesCache = null;
+    private Observable<List<Movie>> mTopRatedMoviesCache = null;
+    private Observable<List<Movie>> mFavoriteMoviesCache = null;
+
     @Inject
     public MovieRepository(RemoteMovieRepository remoteRepository,
                            LocalMovieRepository localRepository) {
@@ -27,15 +31,27 @@ public class MovieRepository {
     }
 
     public Observable<List<Movie>> getPopularMovies() {
-        return mRemoteRepository.getPopularMovies();
+        if (mPopularMoviesCache == null) {
+            mPopularMoviesCache = mRemoteRepository.getPopularMovies().cache();
+        }
+
+        return mPopularMoviesCache;
     }
 
     public Observable<List<Movie>> getTopRatedMovies() {
-        return mRemoteRepository.getTopRatedMovies();
+        if (mTopRatedMoviesCache == null) {
+            mTopRatedMoviesCache = mRemoteRepository.getTopRatedMovies().cache();
+        }
+
+        return mTopRatedMoviesCache;
     }
 
     public Observable<List<Movie>> getFavoriteMovies() {
-        return mLocalRepository.getFavoriteMovies();
+        if (mFavoriteMoviesCache == null) {
+            mFavoriteMoviesCache = mLocalRepository.getFavoriteMovies().cache();
+        }
+
+        return mFavoriteMoviesCache;
     }
 
     public Observable<Boolean> isMovieFavorite(Movie movie) {

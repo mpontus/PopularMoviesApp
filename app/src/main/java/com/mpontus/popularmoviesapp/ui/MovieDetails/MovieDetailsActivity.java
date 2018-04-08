@@ -2,7 +2,8 @@ package com.mpontus.popularmoviesapp.ui.MovieDetails;
 
 import android.app.ActionBar;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,15 +17,18 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.android.AndroidInjection;
+import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.annotations.Nullable;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends DaggerAppCompatActivity implements MovieDetailsContract.View {
 
     public static final String EXTRA_MOVIE = "EXTRA_MOVIE";
 
     @Inject
-    MovieDetailsPresenter mPresenter;
+    MovieDetailsContract.Presenter mPresenter;
+
+    @Inject
+    ReviewListAdapter mReviewListAdapter;
 
     @Nullable
     @BindView(R.id.ivBackdrop)
@@ -37,11 +41,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
     Button mFavoriteButton;
     @BindView(R.id.btnUnfavorite)
     Button mUnfavoriteButton;
+    @BindView(R.id.rvReviews)
+    RecyclerView mReviewsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_movie_details);
 
         ActionBar actionBar = getActionBar();
@@ -51,6 +57,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         ButterKnife.bind(this);
+
+        mReviewsView.setAdapter(mReviewListAdapter);
+        mReviewsView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         mPresenter.attach();
     }
@@ -83,6 +92,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     public void hideUnfavoriteButton() {
         mUnfavoriteButton.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void setReviewCount(int count) {
+        mReviewListAdapter.setItemCount(count);
     }
 
     @OnClick(R.id.btnFavorite)

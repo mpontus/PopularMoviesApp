@@ -1,18 +1,22 @@
 package com.mpontus.popularmoviesapp.ui.MovieDetails;
 
-import android.net.Uri;
-
 interface MovieDetailsContract {
     interface View {
-        void setTitle(String title, int year);
+        void setTitle(String title);
 
-        void setBackdrop(Uri backdropUrl);
-
-        void setPoster(Uri posterUrl);
-
-        void setRating(float voteAverage, int voteCount);
+        void setBackdrop(String backdropPath);
 
         void setDescription(String description);
+
+        void showFavoriteButton();
+
+        void hideFavoriteButton();
+
+        void showUnfavoriteButton();
+
+        void hideUnfavoriteButton();
+
+        void setReviewCount(int count);
     }
 
     interface Presenter {
@@ -21,5 +25,23 @@ interface MovieDetailsContract {
         void detach();
 
         void onFavoriteClick();
+
+        void onUnfavoriteClick();
+    }
+
+    interface ReviewItemView {
+        void attachPresenter(ReviewItemPresenter presenter);
+
+        void setContent(String text);
+    }
+
+    interface ReviewItemPresenter {
+        void attach();
+
+        void detach();
+    }
+
+    interface ReviewItemPresenterFactory {
+        ReviewItemPresenter createReviewItemPresenter(ReviewItemView view, int position);
     }
 }

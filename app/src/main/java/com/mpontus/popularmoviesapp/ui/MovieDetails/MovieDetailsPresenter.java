@@ -5,6 +5,9 @@ import android.util.Log;
 import com.mpontus.popularmoviesapp.data.MovieRepository;
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
+import com.mpontus.popularmoviesapp.tmdb.Review;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -12,19 +15,20 @@ import javax.inject.Named;
 import io.reactivex.Scheduler;
 
 @ActivityScoped
-public class MovieDetailsPresenter {
+public class MovieDetailsPresenter implements MovieDetailsContract.Presenter, MovieDetailsContract.ReviewItemPresenterFactory {
 
     private final MovieRepository mRepository;
     private final Scheduler mMainThreadScheduler;
     private final Scheduler mBackgroundThreadScheduler;
-    private MovieDetailsActivity mView;
+    private MovieDetailsContract.View mView;
     private Movie mMovie;
+    private List<Review> mReviews;
 
     @Inject
     MovieDetailsPresenter(MovieRepository repository,
                           @Named("MAIN") Scheduler mainThreadScheduler,
                           @Named("BACKGROUND") Scheduler backgroundThreadScheduler,
-                          MovieDetailsActivity view,
+                          MovieDetailsContract.View view,
                           Movie movie) {
         mRepository = repository;
         mMainThreadScheduler = mainThreadScheduler;
@@ -53,14 +57,16 @@ public class MovieDetailsPresenter {
                 .subscribeOn(mBackgroundThreadScheduler)
                 .observeOn(mMainThreadScheduler)
                 .subscribe(reviews -> {
-                    Log.v("Reviews", "" + reviews.size());
+                    mReviews = reviews;
+
+                    mView.setReviewCount(reviews.size());
                 });
 
         mRepository.getMovieVideos(mMovie)
                 .subscribeOn(mBackgroundThreadScheduler)
                 .observeOn(mMainThreadScheduler)
                 .subscribe(videos -> {
-                    Log.v("Reviews", "" + videos.size());
+                    Log.v("Videos", "" + videos.size());
                 });
     }
 
@@ -85,5 +91,28 @@ public class MovieDetailsPresenter {
                     mView.hideUnfavoriteButton();
                     mView.showFavoriteButton();
                 });
+    }
+
+    @Override
+    public MovieDetailsContract.ReviewItemPresenter createReviewItemPresenter(
+            MovieDetailsContract.ReviewItemView view, int position) {
+        return new ReviewViewHolderPresenter(view, mReviews.get(position));
+    }
+
+    public class ReviewViewHolderPresenter implements MovieDetailsContract.ReviewItemPresenter {
+        private final MovieDetailsContract.ReviewItemView mView;
+        private final Review mReview;
+
+        ReviewViewHolderPresenter(MovieDetailsContract.ReviewItemView view, Review review) {
+            mView = view;
+            mReview = review;
+        }
+
+        public void attach() {
+            mView.setContent(mReview.content);
+        }
+
+        public void detach() {
+        }
     }
 }

@@ -8,6 +8,10 @@ interface MovieDetailsContract {
 
         void setDescription(String description);
 
+        void setVoteAverage(float average);
+
+        void setVoteCount(int count);
+
         void setReviewCount(int count);
 
         void setVideoCount(int count);

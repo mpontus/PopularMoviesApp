@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.mpontus.popularmoviesapp.R;
@@ -38,6 +39,12 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     CollapsingToolbarLayout mToolbarLayout;
     @BindView(R.id.ivBackdrop)
     ImageView mBackdropView;
+    @BindView(R.id.ratingBar)
+    RatingBar mRatingBar;
+    @BindView(R.id.voteCount)
+    TextView mVoteCount;
+    @BindView(R.id.voteAverage)
+    TextView mVoteAverage;
     @BindView(R.id.tvDescription)
     TextView mDescriptionView;
     @BindView(R.id.btnFavorite)
@@ -91,6 +98,17 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     @Override
     public void setFavoriteChecked(boolean isChecked) {
         mFavoriteButtonView.setChecked(isChecked);
+    }
+
+    @Override
+    public void setVoteAverage(float average) {
+        mRatingBar.setRating(average / 2);
+        mVoteAverage.setText(getString(R.string.vote_average_format, average));
+    }
+
+    @Override
+    public void setVoteCount(int count) {
+        mVoteCount.setText(getResources().getQuantityString(R.plurals.number_of_votes, count, count));
     }
 
     @Override

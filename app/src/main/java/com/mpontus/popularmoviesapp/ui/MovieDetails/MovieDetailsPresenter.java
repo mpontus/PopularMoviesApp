@@ -49,6 +49,8 @@ public class MovieDetailsPresenter implements
         mView.setTitle(mMovie.title);
         mView.setBackdrop(mMovie.backdropPath);
         mView.setDescription(mMovie.overview);
+        mView.setVoteAverage(mMovie.voteAverage);
+        mView.setVoteCount(mMovie.voteCount);
 
         mRepository.isMovieFavorite(mMovie)
                 .subscribeOn(mBackgroundThreadScheduler)

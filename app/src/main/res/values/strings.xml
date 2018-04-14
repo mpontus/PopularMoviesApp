@@ -18,8 +18,9 @@
     <string name="movie_source_popular">Popular</string>
     <string name="movie_source_top_rated">Top Rated</string>
     <string name="movie_source_favorite">Favorite</string>
+    <string name="vote_average_format" translatable="false">%.2f</string>
 
-    <plurals name="numberOfVotes">
+    <plurals name="number_of_votes">
         <item quantity="one">%d vote</item>
         <item quantity="other">%d votes</item>
     </plurals>

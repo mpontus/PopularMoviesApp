@@ -21,7 +21,8 @@
     </style>
 
     <style name="MovieTitle">
-        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">28sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 

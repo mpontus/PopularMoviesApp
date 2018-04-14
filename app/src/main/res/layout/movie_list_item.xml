@@ -19,12 +19,17 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        style="@style/MovieTitle"
+        android:layout_width="0dp"
+        android:layout_marginEnd="16dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:shadowColor="#000000"
         android:layout_marginStart="16dp"
+        android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/backdrop"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Movie Title" />
 </android.support.constraint.ConstraintLayout>

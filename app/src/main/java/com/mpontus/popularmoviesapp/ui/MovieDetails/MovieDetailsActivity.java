@@ -39,6 +39,8 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     CollapsingToolbarLayout mToolbarLayout;
     @BindView(R.id.ivBackdrop)
     ImageView mBackdropView;
+    @BindView(R.id.tvTitle)
+    TextView mTitleView;
     @BindView(R.id.ratingBar)
     RatingBar mRatingBar;
     @BindView(R.id.voteCount)
@@ -75,6 +77,7 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -82,7 +85,7 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     }
 
     public void setTitle(String title) {
-        mToolbarLayout.setTitle(title);
+        mTitleView.setText(title);
     }
 
     public void setDescription(String description) {

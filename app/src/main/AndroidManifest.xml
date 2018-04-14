@@ -26,7 +26,7 @@
         <activity
             android:name=".ui.MovieDetails.MovieDetailsActivity"
             android:parentActivityName=".ui.MovieList.MovieListActivity"
-            android:theme="@style/AppTheme.InvisibleActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
             android:name=".data.local.PopularMoviesContentProvider"

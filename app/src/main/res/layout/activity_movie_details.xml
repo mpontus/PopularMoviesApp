@@ -1,135 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.mpontus.popularmoviesapp.ui.MovieDetails.MovieDetailsActivity">
+    android:layout_height="match_parent">
 
-    <!-- Movie backdrop image for the background -->
-    <ImageView
-        android:id="@+id/ivBackdrop"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        android:transitionName="backdrop"
-        app:layout_constraintDimensionRatio="3:2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@color/colorPrimary"
-        tools:ignore="ContentDescription" />
-
-
-    <!-- Movie poster wrapped in a CardView -->
-    <android.support.v7.widget.CardView
-        android:id="@+id/cvPoster"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:cardElevation="6dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivBackdrop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivBackdrop">
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    </android.support.v7.widget.CardView>
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
 
-    <!-- Semi-transparent movie title background -->
+            <!-- Movie backdrop image for the background -->
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="parallax">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        style="@style/MovieTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivBackdrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Movie Title (year)" />
+                <ImageView
+                    android:id="@+id/ivBackdrop"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    android:transitionName="backdrop"
+                    app:layout_constraintDimensionRatio="3:2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@color/colorPrimary"
+                    tools:ignore="ContentDescription" />
+            </android.support.constraint.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/tvDescription"
-        style="@style/MovieSynopsis"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/cvPoster"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivBackdrop"
-        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 
-    <TextView
-        android:id="@+id/tvTrailersLabel"
-        style="@style/Heading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Videos"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvTrailers"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTrailersLabel" />
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/tvReviewsLabel"
-        style="@style/Heading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Reviews"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvTrailers" />
+    <include layout="@layout/movie_details_content" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvReviews"
-        android:layout_width="0dp"
-        android:layout_height="144dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvReviewsLabel" />
-
-    <com.mpontus.popularmoviesapp.ui.common.FloatingActionButton
+    <com.mpontus.popularmoviesapp.ui.common.CheckableFloatingActionButton
         android:id="@+id/btnFavorite"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:focusable="true"
         android:background="@drawable/fav_bg"
+        android:src="@drawable/fav"
+        android:tint="@color/white"
         android:elevation="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.458"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:duplicateParentState="true"
-            android:src="@drawable/fav"
-            android:tint="@color/white"
-            tools:layout_editor_absoluteX="159dp"
-            tools:layout_editor_absoluteY="116dp" />
-    </com.mpontus.popularmoviesapp.ui.common.FloatingActionButton>
-
-</android.support.constraint.ConstraintLayout>
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|end" />
+</android.support.design.widget.CoordinatorLayout>

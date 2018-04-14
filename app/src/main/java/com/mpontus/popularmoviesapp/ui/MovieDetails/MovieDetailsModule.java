@@ -19,6 +19,9 @@ public abstract class MovieDetailsModule {
     @Binds
     abstract MovieDetailsContract.ReviewItemPresenterFactory provideReviewItemPresenterFactory(MovieDetailsPresenter presenter);
 
+    @Binds
+    abstract MovieDetailsContract.TrailerItemPresenterFactory provideTrailerItemPresenterFactory(MovieDetailsPresenter presenter);
+
     @Provides
     static Movie provideMovie(MovieDetailsActivity activity) {
         return (Movie) activity.getIntent().getParcelableExtra(EXTRA_MOVIE);

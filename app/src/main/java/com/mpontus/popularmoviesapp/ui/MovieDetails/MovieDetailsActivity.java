@@ -30,6 +30,9 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     @Inject
     ReviewListAdapter mReviewListAdapter;
 
+    @Inject
+    TrailerListAdapter mTrailerListAdapter;
+
     @Nullable
     @BindView(R.id.ivBackdrop)
     ImageView mBackdropView;
@@ -43,6 +46,8 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     Button mUnfavoriteButton;
     @BindView(R.id.rvReviews)
     RecyclerView mReviewsView;
+    @BindView(R.id.rvTrailers)
+    RecyclerView mTrailersView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,9 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
 
         mReviewsView.setAdapter(mReviewListAdapter);
         mReviewsView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        mTrailersView.setAdapter(mTrailerListAdapter);
+        mTrailersView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         mPresenter.attach();
     }
@@ -97,6 +105,11 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     @Override
     public void setReviewCount(int count) {
         mReviewListAdapter.setItemCount(count);
+    }
+
+    @Override
+    public void setVideoCount(int count) {
+        mTrailerListAdapter.setItemCount(count);
     }
 
     @OnClick(R.id.btnFavorite)

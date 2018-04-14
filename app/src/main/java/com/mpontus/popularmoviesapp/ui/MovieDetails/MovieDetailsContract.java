@@ -17,6 +17,8 @@ interface MovieDetailsContract {
         void hideUnfavoriteButton();
 
         void setReviewCount(int count);
+
+        void setVideoCount(int count);
     }
 
     interface Presenter {
@@ -43,5 +45,23 @@ interface MovieDetailsContract {
 
     interface ReviewItemPresenterFactory {
         ReviewItemPresenter createReviewItemPresenter(ReviewItemView view, int position);
+    }
+
+    interface TrailerItemView {
+        void attachPresenter(TrailerItemPresenter presenter);
+
+        void setYoutubeVideoId(String id);
+    }
+
+    interface TrailerItemPresenter {
+        void attach();
+
+        void detach();
+
+        void onClick();
+    }
+
+    interface TrailerItemPresenterFactory {
+        TrailerItemPresenter createTrailerItemPresenter(TrailerItemView view, int position);
     }
 }

@@ -6,6 +6,7 @@ import com.mpontus.popularmoviesapp.data.MovieRepository;
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.Review;
+import com.mpontus.popularmoviesapp.tmdb.Video;
 
 import java.util.List;
 
@@ -15,7 +16,10 @@ import javax.inject.Named;
 import io.reactivex.Scheduler;
 
 @ActivityScoped
-public class MovieDetailsPresenter implements MovieDetailsContract.Presenter, MovieDetailsContract.ReviewItemPresenterFactory {
+public class MovieDetailsPresenter implements
+        MovieDetailsContract.Presenter,
+        MovieDetailsContract.ReviewItemPresenterFactory,
+        MovieDetailsContract.TrailerItemPresenterFactory {
 
     private final MovieRepository mRepository;
     private final Scheduler mMainThreadScheduler;
@@ -23,6 +27,7 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter, Mo
     private MovieDetailsContract.View mView;
     private Movie mMovie;
     private List<Review> mReviews;
+    private List<Video> mVideos;
 
     @Inject
     MovieDetailsPresenter(MovieRepository repository,
@@ -66,7 +71,9 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter, Mo
                 .subscribeOn(mBackgroundThreadScheduler)
                 .observeOn(mMainThreadScheduler)
                 .subscribe(videos -> {
-                    Log.v("Videos", "" + videos.size());
+                    mVideos = videos;
+
+                    mView.setVideoCount(videos.size());
                 });
     }
 
@@ -99,6 +106,11 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter, Mo
         return new ReviewViewHolderPresenter(view, mReviews.get(position));
     }
 
+    @Override
+    public MovieDetailsContract.TrailerItemPresenter createTrailerItemPresenter(MovieDetailsContract.TrailerItemView view, int position) {
+        return new TrailerViewHolderPresenter(view, mVideos.get(position));
+    }
+
     public class ReviewViewHolderPresenter implements MovieDetailsContract.ReviewItemPresenter {
         private final MovieDetailsContract.ReviewItemView mView;
         private final Review mReview;
@@ -108,11 +120,46 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter, Mo
             mReview = review;
         }
 
+        @Override
         public void attach() {
             mView.setContent(mReview.content);
         }
 
+        @Override
         public void detach() {
+        }
+    }
+
+    public class TrailerViewHolderPresenter implements MovieDetailsContract.TrailerItemPresenter {
+        private final MovieDetailsContract.TrailerItemView mView;
+        private final Video mVideo;
+
+        TrailerViewHolderPresenter(MovieDetailsContract.TrailerItemView view, Video video) {
+            mView = view;
+            mVideo = video;
+        }
+
+        @Override
+        public void attach() {
+            switch (mVideo.site) {
+                case "YouTube":
+                    mView.setYoutubeVideoId(mVideo.key);
+
+                    break;
+
+                default:
+                    throw new RuntimeException("Unsupported video site: " + mVideo.site);
+            }
+        }
+
+        @Override
+        public void detach() {
+
+        }
+
+        @Override
+        public void onClick() {
+            Log.v("TrailerViewHolder", "Opening video");
         }
     }
 }

@@ -26,6 +26,7 @@ public class MovieDetailsPresenter implements
     private final Navigator mNavigator;
     private MovieDetailsContract.View mView;
     private Movie mMovie;
+    private boolean mIsFavorite;
     private List<Review> mReviews;
     private List<Video> mVideos;
 
@@ -53,11 +54,9 @@ public class MovieDetailsPresenter implements
                 .subscribeOn(mBackgroundThreadScheduler)
                 .observeOn(mMainThreadScheduler)
                 .subscribe(isFavorite -> {
-                    if (isFavorite) {
-                        mView.showUnfavoriteButton();
-                    } else {
-                        mView.showFavoriteButton();
-                    }
+                    mIsFavorite = isFavorite;
+
+                    mView.setFavoriteChecked(isFavorite);
                 });
 
         mRepository.getMovieReviews(mMovie)
@@ -82,23 +81,17 @@ public class MovieDetailsPresenter implements
     public void detach() {
     }
 
-    public void onFavoriteClick() {
-        mRepository.setMovieFavorite(mMovie, true)
-                .subscribeOn(mBackgroundThreadScheduler)
-                .observeOn(mMainThreadScheduler)
-                .subscribe(() -> {
-                    mView.hideFavoriteButton();
-                    mView.showUnfavoriteButton();
-                });
-    }
+    @Override
+    public void onFavoriteChanged(boolean isChecked) {
+        if (isChecked == mIsFavorite) {
+            return;
+        }
 
-    public void onUnfavoriteClick() {
-        mRepository.setMovieFavorite(mMovie, false)
+        mRepository.setMovieFavorite(mMovie, isChecked)
                 .subscribeOn(mBackgroundThreadScheduler)
                 .observeOn(mMainThreadScheduler)
                 .subscribe(() -> {
-                    mView.hideUnfavoriteButton();
-                    mView.showFavoriteButton();
+                    mIsFavorite = isChecked;
                 });
     }
 

@@ -59,6 +59,9 @@ public class MovieRepository {
     }
 
     public Completable setMovieFavorite(Movie movie, boolean isFavorite) {
+        // Invalidate favorite movies cache
+        mFavoriteMoviesCache = null;
+
         if (isFavorite) {
             return mLocalRepository.favoriteMovie(movie);
         } else {

@@ -4,19 +4,17 @@ import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mpontus.popularmoviesapp.R;
+import com.mpontus.popularmoviesapp.ui.common.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.annotations.Nullable;
 
@@ -41,9 +39,7 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     @BindView(R.id.tvDescription)
     TextView mDescriptionView;
     @BindView(R.id.btnFavorite)
-    Button mFavoriteButton;
-    @BindView(R.id.btnUnfavorite)
-    Button mUnfavoriteButton;
+    FloatingActionButton mFavoriteButtonView;
     @BindView(R.id.rvReviews)
     RecyclerView mReviewsView;
     @BindView(R.id.rvTrailers)
@@ -62,6 +58,10 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
         }
 
         ButterKnife.bind(this);
+
+        mFavoriteButtonView.setOnCheckedChangeListener((view, isChecked) -> {
+            mPresenter.onFavoriteChanged(isChecked);
+        });
 
         mReviewsView.setAdapter(mReviewListAdapter);
         mReviewsView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -86,20 +86,9 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
                 .into(mBackdropView);
     }
 
-    public void showFavoriteButton() {
-        mFavoriteButton.setVisibility(View.VISIBLE);
-    }
-
-    public void hideFavoriteButton() {
-        mFavoriteButton.setVisibility(View.INVISIBLE);
-    }
-
-    public void showUnfavoriteButton() {
-        mUnfavoriteButton.setVisibility(View.VISIBLE);
-    }
-
-    public void hideUnfavoriteButton() {
-        mUnfavoriteButton.setVisibility(View.INVISIBLE);
+    @Override
+    public void setFavoriteChecked(boolean isChecked) {
+        mFavoriteButtonView.setChecked(isChecked);
     }
 
     @Override
@@ -110,15 +99,5 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     @Override
     public void setVideoCount(int count) {
         mTrailerListAdapter.setItemCount(count);
-    }
-
-    @OnClick(R.id.btnFavorite)
-    public void onFavoriteClick(View view) {
-        mPresenter.onFavoriteClick();
-    }
-
-    @OnClick(R.id.btnUnfavorite)
-    public void onUnfavoriteClick(View view) {
-        mPresenter.onUnfavoriteClick();
     }
 }

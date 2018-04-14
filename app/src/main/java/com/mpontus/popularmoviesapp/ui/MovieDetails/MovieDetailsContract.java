@@ -8,17 +8,11 @@ interface MovieDetailsContract {
 
         void setDescription(String description);
 
-        void showFavoriteButton();
-
-        void hideFavoriteButton();
-
-        void showUnfavoriteButton();
-
-        void hideUnfavoriteButton();
-
         void setReviewCount(int count);
 
         void setVideoCount(int count);
+
+        void setFavoriteChecked(boolean isChecked);
     }
 
     interface Presenter {
@@ -26,9 +20,7 @@ interface MovieDetailsContract {
 
         void detach();
 
-        void onFavoriteClick();
-
-        void onUnfavoriteClick();
+        void onFavoriteChanged(boolean isChecked);
     }
 
     interface ReviewItemView {

@@ -8,6 +8,7 @@ import com.mpontus.popularmoviesapp.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ReviewViewHolder extends RecyclerView.ViewHolder implements MovieDetailsContract.ReviewItemView {
 

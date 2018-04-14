@@ -1,5 +1,7 @@
 package com.mpontus.popularmoviesapp.ui.MovieDetails;
 
+import android.app.Activity;
+
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 
 import dagger.Binds;
@@ -10,6 +12,9 @@ import static com.mpontus.popularmoviesapp.ui.MovieDetails.MovieDetailsActivity.
 
 @Module
 public abstract class MovieDetailsModule {
+    @Binds
+    abstract Activity provideActivity(MovieDetailsActivity activity);
+
     @Binds
     abstract MovieDetailsContract.Presenter provideMovieDetailsPresenter(MovieDetailsPresenter presenter);
 

@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class TrailerViewHolder extends RecyclerView.ViewHolder implements MovieDetailsContract.TrailerItemView {
 
@@ -30,6 +31,8 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder implements MovieD
             mPresenter.detach();
         }
 
+        mPresenter = presenter;
+
         presenter.attach();
     }
 
@@ -44,5 +47,10 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder implements MovieD
         Picasso.with(itemView.getContext())
                 .load(thumbnail)
                 .into(mThumnailView);
+    }
+
+    @OnClick(R.id.ivThumbnail)
+    public void onClick(View v) {
+        mPresenter.onClick();
     }
 }

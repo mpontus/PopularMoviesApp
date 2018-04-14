@@ -1,8 +1,7 @@
 package com.mpontus.popularmoviesapp.ui.MovieDetails;
 
-import android.util.Log;
-
 import com.mpontus.popularmoviesapp.data.MovieRepository;
+import com.mpontus.popularmoviesapp.data.Navigator;
 import com.mpontus.popularmoviesapp.di.ActivityScoped;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
 import com.mpontus.popularmoviesapp.tmdb.Review;
@@ -24,6 +23,7 @@ public class MovieDetailsPresenter implements
     private final MovieRepository mRepository;
     private final Scheduler mMainThreadScheduler;
     private final Scheduler mBackgroundThreadScheduler;
+    private final Navigator mNavigator;
     private MovieDetailsContract.View mView;
     private Movie mMovie;
     private List<Review> mReviews;
@@ -33,11 +33,13 @@ public class MovieDetailsPresenter implements
     MovieDetailsPresenter(MovieRepository repository,
                           @Named("MAIN") Scheduler mainThreadScheduler,
                           @Named("BACKGROUND") Scheduler backgroundThreadScheduler,
+                          Navigator navigator,
                           MovieDetailsContract.View view,
                           Movie movie) {
         mRepository = repository;
         mMainThreadScheduler = mainThreadScheduler;
         mBackgroundThreadScheduler = backgroundThreadScheduler;
+        mNavigator = navigator;
         mView = view;
         mMovie = movie;
     }
@@ -159,7 +161,7 @@ public class MovieDetailsPresenter implements
 
         @Override
         public void onClick() {
-            Log.v("TrailerViewHolder", "Opening video");
+            mNavigator.openYoutube(mVideo.key);
         }
     }
 }

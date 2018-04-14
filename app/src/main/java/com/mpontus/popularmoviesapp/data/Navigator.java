@@ -1,7 +1,9 @@
 package com.mpontus.popularmoviesapp.data;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
 
@@ -34,6 +36,18 @@ public class Navigator {
             mActivity.startActivity(intent, options.toBundle());
         } else {
             mActivity.startActivity(intent);
+        }
+    }
+
+    public void openYoutube(String id) {
+        // See https://stackoverflow.com/a/12439378/326574
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://www.youtube.com/watch?v=" + id));
+        try {
+            mActivity.startActivity(appIntent);
+        } catch (ActivityNotFoundException ex) {
+            mActivity.startActivity(webIntent);
         }
     }
 }

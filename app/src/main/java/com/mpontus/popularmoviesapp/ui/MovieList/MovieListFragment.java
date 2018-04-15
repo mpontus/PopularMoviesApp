@@ -2,6 +2,7 @@ package com.mpontus.popularmoviesapp.ui.MovieList;
 
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,7 @@ import dagger.android.support.DaggerFragment;
 @FragmentScoped
 public class MovieListFragment extends DaggerFragment {
     public static final String ARG_MOVIE_SOURCE = "MOVIE_SOURCE";
+    public static final String LAYOUT_MANAGER_INSTANCE_STATE_KEY = "LAYOUT_MANAGER_INSTANCE_STATE";
 
     @Inject
     MovieListPresenter mPresenter;
@@ -67,6 +69,8 @@ public class MovieListFragment extends DaggerFragment {
      */
     @BindViews({R.id.rvMovies})
     List<View> mViewsLoaded;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private Parcelable mLayoutManagerInstanceState;
 
     /**
      * Create new fragment instance for the given movie source
@@ -110,6 +114,11 @@ public class MovieListFragment extends DaggerFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mLayoutManagerInstanceState =
+                    savedInstanceState.getParcelable(LAYOUT_MANAGER_INSTANCE_STATE_KEY);
+        }
     }
 
     @Override
@@ -126,8 +135,10 @@ public class MovieListFragment extends DaggerFragment {
 
         ButterKnife.bind(this, view);
 
+        mLayoutManager = mLayoutManagerFactory.getLayoutManager();
+
         mMovieListView.setAdapter(mMovieListAdapter);
-        mMovieListView.setLayoutManager(mLayoutManagerFactory.getLayoutManager());
+        mMovieListView.setLayoutManager(mLayoutManager);
 
         return view;
     }
@@ -139,8 +150,23 @@ public class MovieListFragment extends DaggerFragment {
         mPresenter.detach();
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        Parcelable layoutManagerInstanceState = this.mLayoutManager.onSaveInstanceState();
+
+        outState.putParcelable(LAYOUT_MANAGER_INSTANCE_STATE_KEY, layoutManagerInstanceState);
+
+        super.onSaveInstanceState(outState);
+    }
+
     public void setMovieCount(int count) {
         mMovieListAdapter.setItemCount(count);
+
+        if (mLayoutManagerInstanceState != null) {
+            mLayoutManager.onRestoreInstanceState(mLayoutManagerInstanceState);
+
+            mLayoutManagerInstanceState = null;
+        }
     }
 
     public void showOffline() {

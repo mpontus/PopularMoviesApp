@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.view.Display;
 import android.view.WindowManager;
 
 import javax.inject.Singleton;
@@ -31,6 +32,12 @@ public class AppModule {
     @Singleton
     WindowManager provideWindowManager(@ApplicationContext Context context) {
         return (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    Display provideDisplay(WindowManager windowManager) {
+        return windowManager.getDefaultDisplay();
     }
 
     @Provides

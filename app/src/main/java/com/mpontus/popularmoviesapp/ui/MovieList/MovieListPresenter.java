@@ -130,6 +130,7 @@ public class MovieListPresenter {
         public void attach() {
             mView.setTitle(mMovie.title);
             mView.setBackdrop(mMovie.backdropPath);
+            mView.setPoster(mMovie.posterPath);
         }
 
         public void detach() {

@@ -10,14 +10,20 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.annotations.Nullable;
 
 public class MovieListViewHolder extends RecyclerView.ViewHolder {
     private MovieListPresenter.ItemPresenter mPresenter;
 
+    @Nullable
     @BindView(R.id.title)
     TextView mTitleView;
+    @Nullable
     @BindView(R.id.backdrop)
     ImageView mBackdropView;
+    @Nullable
+    @BindView(R.id.poster)
+    ImageView mPosterView;
 
     public MovieListViewHolder(View view) {
         super(view);
@@ -38,13 +44,31 @@ public class MovieListViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setTitle(String title) {
+        if (mTitleView == null) {
+            return;
+        }
+
         mTitleView.setText(title);
     }
 
     public void setBackdrop(String backdropPath) {
+        if (mBackdropView == null) {
+            return;
+        }
+
         Picasso.with(itemView.getContext())
                 .load("https://image.tmdb.org/t/p/w300" + backdropPath)
                 .into(mBackdropView);
+    }
+
+    public void setPoster(String posterPath) {
+        if (mPosterView == null) {
+            return;
+        }
+
+        Picasso.with(itemView.getContext())
+                .load("https://image.tmdb.org/t/p/w342" + posterPath)
+                .into(mPosterView);
     }
 
     public void onClick(View view) {

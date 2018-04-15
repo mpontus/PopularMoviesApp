@@ -40,7 +40,7 @@ public class MovieListFragment extends DaggerFragment {
      * Recycler view layout manager
      */
     @Inject
-    RecyclerView.LayoutManager mMovieListLayoutManager;
+    LayoutManagerFactory mLayoutManagerFactory;
 
     /**
      * Recycler view for movie listing
@@ -127,7 +127,7 @@ public class MovieListFragment extends DaggerFragment {
         ButterKnife.bind(this, view);
 
         mMovieListView.setAdapter(mMovieListAdapter);
-        mMovieListView.setLayoutManager(mMovieListLayoutManager);
+        mMovieListView.setLayoutManager(mLayoutManagerFactory.getLayoutManager());
 
         return view;
     }

@@ -108,7 +108,7 @@ public class Movie implements Parcelable {
     /**
      * Relative image url of the movie's poster
      */
-    private String posterPath;
+    public String posterPath;
 
     public Movie() {
     }

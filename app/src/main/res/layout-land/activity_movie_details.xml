@@ -52,6 +52,13 @@
                 android:layout_marginTop="16dp"
                 tools:text="Movie Title" />
 
+            <TextView
+                android:id="@+id/tvReleaseYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                tools:text="(year)" />
+
             <include layout="@layout/movie_details_content" />
         </LinearLayout>
     </ScrollView>

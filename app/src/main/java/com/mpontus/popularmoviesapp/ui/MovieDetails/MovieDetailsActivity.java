@@ -38,8 +38,12 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     Toolbar mToolbar;
     @BindView(R.id.ivBackdrop)
     ImageView mBackdropView;
+    @BindView(R.id.ivPoster)
+    ImageView mPosterView;
     @BindView(R.id.tvTitle)
     TextView mTitleView;
+    @BindView(R.id.tvReleaseYear)
+    TextView mReleaseYear;
     @BindView(R.id.ratingBar)
     RatingBar mRatingBar;
     @BindView(R.id.voteCount)
@@ -89,14 +93,28 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
         mTitleView.setText(title);
     }
 
+    @Override
+    public void setReleaseYear(int year) {
+        mReleaseYear.setText(getString(R.string.release_year_format, year));
+    }
+
+    @Override
     public void setDescription(String description) {
         mDescriptionView.setText(description);
     }
 
+    @Override
     public void setBackdrop(String backdropPath) {
         Picasso.with(this)
                 .load("https://image.tmdb.org/t/p/w300" + backdropPath)
                 .into(mBackdropView);
+    }
+
+    @Override
+    public void setPoster(String posterPath) {
+        Picasso.with(this)
+                .load("https://image.tmdb.org/t/p/w185" + posterPath)
+                .into(mPosterView);
     }
 
     @Override

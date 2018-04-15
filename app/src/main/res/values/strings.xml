@@ -19,6 +19,7 @@
     <string name="movie_source_top_rated">Top Rated</string>
     <string name="movie_source_favorite">Favorite</string>
     <string name="vote_average_format" translatable="false">%.2f</string>
+    <string name="release_year_format" translatable="false">(%d)</string>
 
     <plurals name="number_of_votes">
         <item quantity="one">%d vote</item>

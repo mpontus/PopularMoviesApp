@@ -47,7 +47,9 @@ public class MovieDetailsPresenter implements
 
     public void attach() {
         mView.setTitle(mMovie.title);
+        mView.setReleaseYear(mMovie.getReleaseYear());
         mView.setBackdrop(mMovie.backdropPath);
+        mView.setPoster(mMovie.posterPath);
         mView.setDescription(mMovie.overview);
         mView.setVoteAverage(mMovie.voteAverage);
         mView.setVoteCount(mMovie.voteCount);

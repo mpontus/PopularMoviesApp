@@ -4,7 +4,11 @@ interface MovieDetailsContract {
     interface View {
         void setTitle(String title);
 
+        void setReleaseYear(int year);
+
         void setBackdrop(String backdropPath);
+
+        void setPoster(String posterPath);
 
         void setDescription(String description);
 

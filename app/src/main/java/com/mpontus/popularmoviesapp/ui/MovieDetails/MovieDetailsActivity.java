@@ -1,7 +1,6 @@
 package com.mpontus.popularmoviesapp.ui.MovieDetails;
 
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +18,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
+import io.reactivex.annotations.Nullable;
 
 public class MovieDetailsActivity extends DaggerAppCompatActivity implements MovieDetailsContract.View {
 
@@ -33,10 +33,9 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
     @Inject
     TrailerListAdapter mTrailerListAdapter;
 
+    @Nullable
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.toolbarLayout)
-    CollapsingToolbarLayout mToolbarLayout;
     @BindView(R.id.ivBackdrop)
     ImageView mBackdropView;
     @BindView(R.id.tvTitle)
@@ -62,7 +61,9 @@ public class MovieDetailsActivity extends DaggerAppCompatActivity implements Mov
         setContentView(R.layout.activity_movie_details);
         ButterKnife.bind(this);
 
-        setSupportActionBar(mToolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+        }
 
         mFavoriteButtonView.setOnCheckedChangeListener((view, isChecked) -> {
             mPresenter.onFavoriteChanged(isChecked);

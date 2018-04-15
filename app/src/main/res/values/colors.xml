@@ -14,4 +14,5 @@
     <color name="colorPrimary">@color/ebonyClay</color>
     <color name="colorPrimaryDark">@color/ebonyClayDark</color>
     <color name="colorAccent">@color/goldenGrassLight</color>
+    <color name="semiTransparentBackground">#B8202139</color>
 </resources>

@@ -136,8 +136,8 @@ public class MovieListPresenter {
         public void detach() {
         }
 
-        public void onClick(View backdropView) {
-            mNavigator.openMovieDetails(mMovie, backdropView);
+        public void onClick(View view, View backdropView, View posterView) {
+            mNavigator.openMovieDetails(mMovie, null, posterView);
         }
     }
 }

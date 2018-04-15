@@ -24,7 +24,7 @@ public class Navigator {
         mActivity = activity;
     }
 
-    public void openMovieDetails(Movie movie, @Nullable View backdropView) {
+    public void openMovieDetails(Movie movie, @Nullable View backdropView, @Nullable View posterView) {
         Intent intent = new Intent(mActivity, MovieDetailsActivity.class);
 
         intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE, movie);
@@ -32,6 +32,11 @@ public class Navigator {
         if (backdropView != null) {
             ActivityOptionsCompat options = ActivityOptionsCompat.
                     makeSceneTransitionAnimation(mActivity, backdropView, "backdrop");
+
+            mActivity.startActivity(intent, options.toBundle());
+        } else if (posterView != null) {
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(mActivity, posterView, "poster");
 
             mActivity.startActivity(intent, options.toBundle());
         } else {

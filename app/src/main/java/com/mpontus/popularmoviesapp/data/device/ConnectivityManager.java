@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
+// Attribution: https://github.com/f2prateek/rx-receivers
 public class ConnectivityManager {
     private final Context mContext;
 

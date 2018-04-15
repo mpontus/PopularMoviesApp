@@ -21,6 +21,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.widget.Checkable;
 
+// Attribution: https://github.com/kiddouk/CheckableFloatingActionButton
 public class CheckableFloatingActionButton extends FloatingActionButton implements Checkable {
     private static final int[] CHECKED_STATE_SET = {
             android.R.attr.state_checked

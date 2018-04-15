@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Scheduler;
+import io.reactivex.disposables.CompositeDisposable;
 
 @ActivityScoped
 public class MovieDetailsPresenter implements
@@ -24,6 +25,7 @@ public class MovieDetailsPresenter implements
     private final Scheduler mMainThreadScheduler;
     private final Scheduler mBackgroundThreadScheduler;
     private final Navigator mNavigator;
+    private final CompositeDisposable mCompositeDisposable;
     private MovieDetailsContract.View mView;
     private Movie mMovie;
     private boolean mIsFavorite;
@@ -43,6 +45,7 @@ public class MovieDetailsPresenter implements
         mNavigator = navigator;
         mView = view;
         mMovie = movie;
+        mCompositeDisposable = new CompositeDisposable();
     }
 
     public void attach() {
@@ -54,35 +57,40 @@ public class MovieDetailsPresenter implements
         mView.setVoteAverage(mMovie.voteAverage);
         mView.setVoteCount(mMovie.voteCount);
 
-        mRepository.isMovieFavorite(mMovie)
-                .subscribeOn(mBackgroundThreadScheduler)
-                .observeOn(mMainThreadScheduler)
-                .subscribe(isFavorite -> {
-                    mIsFavorite = isFavorite;
+        mCompositeDisposable.addAll(
 
-                    mView.setFavoriteChecked(isFavorite);
-                });
+                mRepository.isMovieFavorite(mMovie)
+                        .subscribeOn(mBackgroundThreadScheduler)
+                        .observeOn(mMainThreadScheduler)
+                        .subscribe(isFavorite -> {
+                            mIsFavorite = isFavorite;
 
-        mRepository.getMovieReviews(mMovie)
-                .subscribeOn(mBackgroundThreadScheduler)
-                .observeOn(mMainThreadScheduler)
-                .subscribe(reviews -> {
-                    mReviews = reviews;
+                            mView.setFavoriteChecked(isFavorite);
+                        }),
 
-                    mView.setReviewCount(reviews.size());
-                });
+                mRepository.getMovieReviews(mMovie)
+                        .subscribeOn(mBackgroundThreadScheduler)
+                        .observeOn(mMainThreadScheduler)
+                        .subscribe(reviews -> {
+                            mReviews = reviews;
 
-        mRepository.getMovieVideos(mMovie)
-                .subscribeOn(mBackgroundThreadScheduler)
-                .observeOn(mMainThreadScheduler)
-                .subscribe(videos -> {
-                    mVideos = videos;
+                            mView.setReviewCount(reviews.size());
+                        }),
 
-                    mView.setVideoCount(videos.size());
-                });
+                mRepository.getMovieVideos(mMovie)
+                        .subscribeOn(mBackgroundThreadScheduler)
+                        .observeOn(mMainThreadScheduler)
+                        .subscribe(videos -> {
+                            mVideos = videos;
+
+                            mView.setVideoCount(videos.size());
+                        })
+
+        );
     }
 
     public void detach() {
+        mCompositeDisposable.dispose();
     }
 
     @Override

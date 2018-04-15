@@ -3,9 +3,9 @@ package com.mpontus.popularmoviesapp.ui.MovieList;
 import android.util.Log;
 import android.view.View;
 
-import com.mpontus.popularmoviesapp.data.AppConnectivityHelper;
 import com.mpontus.popularmoviesapp.data.MovieRepository;
 import com.mpontus.popularmoviesapp.data.Navigator;
+import com.mpontus.popularmoviesapp.data.device.ConnectivityManager;
 import com.mpontus.popularmoviesapp.di.FragmentScoped;
 import com.mpontus.popularmoviesapp.domain.MovieSourceType;
 import com.mpontus.popularmoviesapp.tmdb.Movie;
@@ -24,7 +24,7 @@ public class MovieListPresenter {
     private static final String TAG = "MovieListPresenter";
 
     private final MovieListFragment mView;
-    private final AppConnectivityHelper mConnectivityHelper;
+    private final ConnectivityManager mConnectivityManager;
     private final Navigator mNavigator;
     private final MovieRepository mRepository;
     private final Scheduler mMainThreadScheduler;
@@ -34,14 +34,14 @@ public class MovieListPresenter {
     private List<Movie> mMovieList;
 
     @Inject
-    MovieListPresenter(AppConnectivityHelper networkStateHelper,
+    MovieListPresenter(ConnectivityManager connectivityManager,
                        Navigator navigator,
                        MovieRepository repository,
                        @Named("MAIN") Scheduler mainThreadScheduler,
                        @Named("BACKGROUND") Scheduler backgroundThreadScheduler,
                        MovieListFragment view,
                        MovieSourceType movieSourceType) {
-        mConnectivityHelper = networkStateHelper;
+        mConnectivityManager = connectivityManager;
         mNavigator = navigator;
         mRepository = repository;
         mMainThreadScheduler = mainThreadScheduler;
@@ -52,7 +52,7 @@ public class MovieListPresenter {
     }
 
     public void attach() {
-        Observable<Boolean> isOnlineObservable = mConnectivityHelper.getIsOnline();
+        Observable<Boolean> isOnlineObservable = mConnectivityManager.getIsOnline();
         Observable<List<Movie>> movieListObservable = isOnlineObservable
                 .switchMap(isOnline -> {
                     if (!isOnline) {
